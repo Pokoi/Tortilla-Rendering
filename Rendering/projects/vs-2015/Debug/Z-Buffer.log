@@ -1,0 +1,35 @@
+﻿  Input_Stream.cpp
+  Output_Stream.cpp
+  String.cpp
+  main.cpp
+  View.cpp
+  Generando código...
+sfml-main-d.lib(MainWin32.cpp.obj) : warning LNK4099: no se encontró PDB '' con 'sfml-main-d.lib(MainWin32.cpp.obj)' o en ''; se vinculará el objeto sin tener en cuenta información de depuración
+sfml-system-s-d.lib(Clock.cpp.obj) : warning LNK4099: no se encontró PDB '' con 'sfml-system-s-d.lib(Clock.cpp.obj)' o en ''; se vinculará el objeto sin tener en cuenta información de depuración
+sfml-system-s-d.lib(Err.cpp.obj) : warning LNK4099: no se encontró PDB '' con 'sfml-system-s-d.lib(Err.cpp.obj)' o en ''; se vinculará el objeto sin tener en cuenta información de depuración
+sfml-system-s-d.lib(Lock.cpp.obj) : warning LNK4099: no se encontró PDB '' con 'sfml-system-s-d.lib(Lock.cpp.obj)' o en ''; se vinculará el objeto sin tener en cuenta información de depuración
+sfml-system-s-d.lib(Mutex.cpp.obj) : warning LNK4099: no se encontró PDB '' con 'sfml-system-s-d.lib(Mutex.cpp.obj)' o en ''; se vinculará el objeto sin tener en cuenta información de depuración
+sfml-system-s-d.lib(Sleep.cpp.obj) : warning LNK4099: no se encontró PDB '' con 'sfml-system-s-d.lib(Sleep.cpp.obj)' o en ''; se vinculará el objeto sin tener en cuenta información de depuración
+sfml-system-s-d.lib(String.cpp.obj) : warning LNK4099: no se encontró PDB '' con 'sfml-system-s-d.lib(String.cpp.obj)' o en ''; se vinculará el objeto sin tener en cuenta información de depuración
+sfml-system-s-d.lib(ThreadLocal.cpp.obj) : warning LNK4099: no se encontró PDB '' con 'sfml-system-s-d.lib(ThreadLocal.cpp.obj)' o en ''; se vinculará el objeto sin tener en cuenta información de depuración
+sfml-system-s-d.lib(Time.cpp.obj) : warning LNK4099: no se encontró PDB '' con 'sfml-system-s-d.lib(Time.cpp.obj)' o en ''; se vinculará el objeto sin tener en cuenta información de depuración
+sfml-system-s-d.lib(ClockImpl.cpp.obj) : warning LNK4099: no se encontró PDB '' con 'sfml-system-s-d.lib(ClockImpl.cpp.obj)' o en ''; se vinculará el objeto sin tener en cuenta información de depuración
+sfml-system-s-d.lib(MutexImpl.cpp.obj) : warning LNK4099: no se encontró PDB '' con 'sfml-system-s-d.lib(MutexImpl.cpp.obj)' o en ''; se vinculará el objeto sin tener en cuenta información de depuración
+sfml-system-s-d.lib(SleepImpl.cpp.obj) : warning LNK4099: no se encontró PDB '' con 'sfml-system-s-d.lib(SleepImpl.cpp.obj)' o en ''; se vinculará el objeto sin tener en cuenta información de depuración
+sfml-system-s-d.lib(ThreadLocalImpl.cpp.obj) : warning LNK4099: no se encontró PDB '' con 'sfml-system-s-d.lib(ThreadLocalImpl.cpp.obj)' o en ''; se vinculará el objeto sin tener en cuenta información de depuración
+sfml-window-s-d.lib(Context.cpp.obj) : warning LNK4099: no se encontró PDB '' con 'sfml-window-s-d.lib(Context.cpp.obj)' o en ''; se vinculará el objeto sin tener en cuenta información de depuración
+sfml-window-s-d.lib(GlContext.cpp.obj) : warning LNK4099: no se encontró PDB '' con 'sfml-window-s-d.lib(GlContext.cpp.obj)' o en ''; se vinculará el objeto sin tener en cuenta información de depuración
+sfml-window-s-d.lib(GlResource.cpp.obj) : warning LNK4099: no se encontró PDB '' con 'sfml-window-s-d.lib(GlResource.cpp.obj)' o en ''; se vinculará el objeto sin tener en cuenta información de depuración
+sfml-window-s-d.lib(Joystick.cpp.obj) : warning LNK4099: no se encontró PDB '' con 'sfml-window-s-d.lib(Joystick.cpp.obj)' o en ''; se vinculará el objeto sin tener en cuenta información de depuración
+sfml-window-s-d.lib(JoystickManager.cpp.obj) : warning LNK4099: no se encontró PDB '' con 'sfml-window-s-d.lib(JoystickManager.cpp.obj)' o en ''; se vinculará el objeto sin tener en cuenta información de depuración
+sfml-window-s-d.lib(SensorManager.cpp.obj) : warning LNK4099: no se encontró PDB '' con 'sfml-window-s-d.lib(SensorManager.cpp.obj)' o en ''; se vinculará el objeto sin tener en cuenta información de depuración
+sfml-window-s-d.lib(VideoMode.cpp.obj) : warning LNK4099: no se encontró PDB '' con 'sfml-window-s-d.lib(VideoMode.cpp.obj)' o en ''; se vinculará el objeto sin tener en cuenta información de depuración
+sfml-window-s-d.lib(Window.cpp.obj) : warning LNK4099: no se encontró PDB '' con 'sfml-window-s-d.lib(Window.cpp.obj)' o en ''; se vinculará el objeto sin tener en cuenta información de depuración
+sfml-window-s-d.lib(WindowImpl.cpp.obj) : warning LNK4099: no se encontró PDB '' con 'sfml-window-s-d.lib(WindowImpl.cpp.obj)' o en ''; se vinculará el objeto sin tener en cuenta información de depuración
+sfml-window-s-d.lib(WglContext.cpp.obj) : warning LNK4099: no se encontró PDB '' con 'sfml-window-s-d.lib(WglContext.cpp.obj)' o en ''; se vinculará el objeto sin tener en cuenta información de depuración
+sfml-window-s-d.lib(WglExtensions.cpp.obj) : warning LNK4099: no se encontró PDB '' con 'sfml-window-s-d.lib(WglExtensions.cpp.obj)' o en ''; se vinculará el objeto sin tener en cuenta información de depuración
+sfml-window-s-d.lib(JoystickImpl.cpp.obj) : warning LNK4099: no se encontró PDB '' con 'sfml-window-s-d.lib(JoystickImpl.cpp.obj)' o en ''; se vinculará el objeto sin tener en cuenta información de depuración
+sfml-window-s-d.lib(SensorImpl.cpp.obj) : warning LNK4099: no se encontró PDB '' con 'sfml-window-s-d.lib(SensorImpl.cpp.obj)' o en ''; se vinculará el objeto sin tener en cuenta información de depuración
+sfml-window-s-d.lib(VideoModeImpl.cpp.obj) : warning LNK4099: no se encontró PDB '' con 'sfml-window-s-d.lib(VideoModeImpl.cpp.obj)' o en ''; se vinculará el objeto sin tener en cuenta información de depuración
+sfml-window-s-d.lib(WindowImplWin32.cpp.obj) : warning LNK4099: no se encontró PDB '' con 'sfml-window-s-d.lib(WindowImplWin32.cpp.obj)' o en ''; se vinculará el objeto sin tener en cuenta información de depuración
+  Z-Buffer.vcxproj -> C:\Users\Alumno\Desktop\3DRendering\Rendering\projects\vs-2015\Debug\Z-Buffer.exe
