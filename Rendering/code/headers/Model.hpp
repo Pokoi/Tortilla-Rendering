@@ -38,19 +38,31 @@
 
 namespace Rendering3D
 {
+	struct Transform;
+
 	class Model
 	{
-		std::vector<std::shared_ptr<Mesh>> meshes;
+		std::vector<std::shared_ptr<Mesh>>			meshes;
 		
 		std::vector<toolkit::Point4f>				original_vertices;
 		std::vector<toolkit::Point4f>				original_normals;
 		std::vector<toolkit::Point3f>				original_texture_coordinates;
 		std::vector<Color_Buffer_Rgba8888::Color>	original_colors;
 		std::vector<toolkit::Point4f>				transformed_vertices;
+		std::shared_ptr<Model>						parent;
+
+		Transform *									transform;
 
 	public:
 
 		Model(std::string mesh_path);
+
+		void set_parent(Model& model) 
+		{
+			parent = std::make_shared<Model>(model);
+		}
+
+		const Transform get_transform();
 
 		void Update(float delta);		
 
@@ -60,6 +72,11 @@ namespace Rendering3D
 			{
 				mesh->Render();
 			}
+		}
+
+		~Model() 
+		{
+			delete transform;
 		}
 	};
 }

@@ -41,8 +41,28 @@
 
 namespace Rendering3D
 {
+
+	struct Transform
+	{
+		toolkit::Scaling3f			scaling;
+		toolkit::Rotation3f			rotation_x;
+		toolkit::Rotation3f			rotation_y;
+		toolkit::Rotation3f			rotation_z;
+		toolkit::Translation3f		translation; // Modify to translate the model
+		toolkit::Transformation3f	transformation;
+		
+
+		void operator * (const Transform & other)
+		{
+			transformation = transformation * other.transformation;
+		}
+	};
+	   	 
 	Model::Model(std::string mesh_path)
 	{
+
+		transform = new Transform;
+
 		/////////////////////////////////////////////////////////////////////////////////////
 		// Code based in code snippet from tinyobjloader repository README 
 		// https://github.com/syoyo/tinyobjloader/blob/master/README.md
@@ -81,29 +101,39 @@ namespace Rendering3D
 						tinyobj::real_t		nx  = attrib.normals[3 * idx.normal_index + 0];
 						tinyobj::real_t		ny  = attrib.normals[3 * idx.normal_index + 1];
 						tinyobj::real_t		nz  = attrib.normals[3 * idx.normal_index + 2];
-						tinyobj::real_t		tx  = attrib.texcoords[2 * idx.texcoord_index + 0];
-						tinyobj::real_t		ty  = attrib.texcoords[2 * idx.texcoord_index + 1];	
+						//tinyobj::real_t		tx  = attrib.texcoords[2 * idx.texcoord_index + 0];
+						//tinyobj::real_t		ty  = attrib.texcoords[2 * idx.texcoord_index + 1];	
 												
 						original_vertices			.push_back	({ { vx, vy, vz, 1	} });
 						original_normals			.push_back	({ { nx, ny, nz, 1	} });
-						original_texture_coordinates.push_back	({ { tx, ty, 1		} });
+						//original_texture_coordinates.push_back	({ { tx, ty, 1		} });
 
 						vertices_indices			.push_back(idx.vertex_index);
 						normals_indices				.push_back(idx.normal_index);
-						textures_coord_indices		.push_back(idx.texcoord_index);
+						//textures_coord_indices		.push_back(idx.texcoord_index);
 					}
 
 					index_offset += fv;
 					shapes[s].mesh.material_ids[f];
 				}
 
-				meshes.push_back(std::make_shared<Mesh>(vertices_indices, normals_indices, textures_coord_indices));
+				meshes.push_back(std::make_shared<Mesh>(vertices_indices, normals_indices, textures_coord_indices, *this));
 
 			}
 		}
 
 
 		/////////////////////////////////////////////////////////////////////////////////////
+	}
+
+	inline const Transform Model::get_transform()
+	{
+		if (parent)
+		{
+			(*transform)* parent->get_transform();
+		}
+
+		return *transform;
 	}
 
 	void Model::Update(float delta)
@@ -113,11 +143,31 @@ namespace Rendering3D
 		// To rotate the model in runtime
 		//	angle += 0.025f 
 
-		// Transformations matrices
+		// Modify transformations matrices
+		transform->scaling.set(0.2f);
+		transform->translation.set(0, 0, 0);		 
+		
+		// Unify transformation matrix with parent transformation
+		toolkit::Transformation3f transformation = get_transform().transformation;
 
-		toolkit::Scaling3f scaling(0.2f);
-		toolkit::Rotation3f rotation_x;
-		toolkit::Rotation3f rotation_y;
-		toolkit::Translation3f translation(0, 0, 0); // Modify to translate the model 
+		// Transformation per vertex
+		for (size_t index = 0; index < original_vertices.size(); ++index)
+		{
+			toolkit::Point4f& vertex = transformed_vertices[index] = toolkit::Matrix44f(transformation) * toolkit::Matrix41f(original_vertices[index]);
+
+			// Normalize last value for perspective transformation
+			float divisor = 1.f / vertex[3];
+
+			vertex[0] *= divisor;
+			vertex[1] *= divisor;
+			vertex[2] *= divisor;
+			vertex[3]  = 1.f;
+		}
+
+		//If parent -> transformation * parent transformation
+		// else -> transformation * inverse camera * proyection
+		
+		// Modelo -> Escena -> iluminación -> Camera -> Proyección -> v/w -> NDC -> Viewport
+	
 	}
 }

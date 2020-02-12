@@ -307,6 +307,8 @@
             o0 = vertices[*current_index].coordinates ()[0] + y0 * pitch;
             o1 = vertices[*   next_index].coordinates ()[0] + y1 * pitch;
 
+			// u y v para coordenadas de textura
+
             while (true)
             {
                 interpolate< int64_t, 32 > (offset_cache1, o0, o1, y0, y1);
@@ -339,15 +341,18 @@
                 o1 = *offset_cache1++;
                 z0 = *z_cache0++;
                 z1 = *z_cache1++;
+				// offset de u y v para texturas
 
                 if (o0 < o1)
                 {
                     int z_step = (z1 - z0) / (o1 - o0);
+					// caluclar el step de u y v
 
                     while (o0 < o1)
                     {
                         if (z0 < z_buffer[o0])
                         {
+							//color_bufer.set_color(texture.get_pixel(u0 >> 16, v0 >> 16));
                             color_buffer.set_pixel (o0);
                             z_buffer[o0] = z0;
                         }

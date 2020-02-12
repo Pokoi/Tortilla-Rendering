@@ -12,6 +12,7 @@
 #include <View.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/OpenGL.hpp>
+#include <Model.hpp>
 
 using namespace sf;
 using namespace Rendering3D;
@@ -25,6 +26,9 @@ int main ()
 
     Window window(VideoMode(window_width, window_height), "3DAvanzado | Jesus Fermin Villar Ramirez - 3D Rendering", Style::Titlebar | Style::Close, ContextSettings(32));
     View   view  (window_width, window_height);
+
+
+	//Model model("head.obj");
 
     // Initialization:
 

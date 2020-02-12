@@ -207,6 +207,22 @@ namespace Rendering3D
         {
             if (is_frontface (transformed_vertices.data (), indices))
             {
+				//Point4i clipped_vertices[10]
+				// static const int clipped_indices[] = {0,1,2,3,4,5,6,7,8,9};
+
+				// int vertex_count = polygon_clipper 
+				//(
+					// display_vertices.data(),
+					// indices,
+					// indices+3,
+					// window_w,
+					// window_h,
+					// clipped_vertices
+				//);
+
+				//if (vertex_count >= 3)
+				//{
+
                 // Se establece el color del polígono a partir del color de su primer vértice:
 
                 rasterizer.set_color (original_colors[*indices]);
@@ -214,6 +230,9 @@ namespace Rendering3D
                 // Se rellena el polígono:
 
                 rasterizer.fill_convex_polygon_z_buffer (display_vertices.data (), indices, indices + 3);
+				// rasterizer.fill_convex_polygon_z_buffer (clipped_vertices, clipped_indices, clipped_indices + vertex_count);
+
+				//}
             }
         }
 

@@ -41,23 +41,18 @@ namespace Rendering3D
 		std::vector<int> original_normals_indices;
 		std::vector<int> original_texture_coordinates_indices;
 		
-		std::shared_ptr<Material> material;
+		std::shared_ptr<Material>		material;
+		std::shared_ptr<class Model>	model;
 			
 
 	public:
 
-		Mesh(
-				std::vector<int> vertices_indices,
-				std::vector<int> normals_indices,
-				std::vector<int> textures_coord_indices				
-			) 
-			: 
-			original_vertices_indices			{ vertices_indices		} ,
-			original_normals_indices			{ normals_indices		} ,
-			original_texture_coordinates_indices{ textures_coord_indices} 			
-		{
-
-		}
+		Mesh (
+				std::vector<int>	vertices_indices,
+				std::vector<int>	normals_indices,
+				std::vector<int>	textures_coord_indices,
+				class Model    &	owner
+			);
 
 		void Render();
 	};

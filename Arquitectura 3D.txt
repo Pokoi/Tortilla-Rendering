@@ -13,6 +13,8 @@ class Camera
 {
 	// Transform
 	// Matriz de proyección
+
+	ObtenerMatrizInversa() // Calcula la inversa de la transformacion 
 }
 
 class Material

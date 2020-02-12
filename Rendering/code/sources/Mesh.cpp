@@ -31,11 +31,51 @@
 
 #include <Mesh.hpp>
 
+#include <Model.hpp>		// For constructor assignation
+
+#include <Scaling.hpp>		// For Update transformations
+#include <Rotation.hpp>		// For Update transformations
+#include <Projection.hpp>	// For Update transformations
+#include <Translation.hpp>	// For Update transformations
+
 namespace Rendering3D
 {
 	
+	Mesh::Mesh(
+				std::vector<int>	vertices_indices,
+				std::vector<int>	normals_indices,
+				std::vector<int>	textures_coord_indices,
+				class Model& owner
+			)		
+	{
+		original_vertices_indices			 = vertices_indices;
+		original_normals_indices			 = normals_indices;
+		original_texture_coordinates_indices = textures_coord_indices;
+		model								 = std::make_shared<Model>(owner);
+	}
+	
+	
 	void Mesh::Render()
 	{
-
+		
 	}
 }
+
+
+//anotaciones para el recorte de triángulos
+/*
+Se recomienda hacerlo en una clase aparte
+int polygon_clipper (
+						toolkit::Point4i * vertices,
+						const int * first,
+						const int * last,
+						const int	viewport_width,
+						const int	viewport_height,
+						toolkit::Point4i * clipped_vertices
+					)
+{
+	
+
+}
+
+*/
