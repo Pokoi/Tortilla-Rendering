@@ -39,24 +39,10 @@
 #include <Projection.hpp>	// For Update transformations
 #include <Translation.hpp>	// For Update transformations
 
+#include <Transform.hpp>    // For Transform
+
 namespace Rendering3D
 {
-
-	struct Transform
-	{
-		toolkit::Scaling3f			scaling;
-		toolkit::Rotation3f			rotation_x;
-		toolkit::Rotation3f			rotation_y;
-		toolkit::Rotation3f			rotation_z;
-		toolkit::Translation3f		translation; // Modify to translate the model
-		toolkit::Transformation3f	transformation;
-		
-
-		void operator * (const Transform & other)
-		{
-			transformation = transformation * other.transformation;
-		}
-	};
 	   	 
 	Model::Model(std::string mesh_path)
 	{
@@ -126,7 +112,7 @@ namespace Rendering3D
 		/////////////////////////////////////////////////////////////////////////////////////
 	}
 
-	inline const Transform Model::get_transform()
+	const Transform Model::get_transform()
 	{
 		if (parent)
 		{
@@ -170,4 +156,12 @@ namespace Rendering3D
 		// Modelo -> Escena -> iluminación -> Camera -> Proyección -> v/w -> NDC -> Viewport
 	
 	}
+    
+    void Model::Render(View& view)
+    {
+        for (std::shared_ptr <Mesh> mesh : meshes)
+        {
+            mesh->Render(view);
+        }
+    }
 }

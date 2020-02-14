@@ -64,15 +64,14 @@ namespace Rendering3D
 
 		const Transform get_transform();
 
+        std::vector<toolkit::Point4f> & get_transformed_vertices()
+        {
+            return transformed_vertices;
+        }
+
 		void Update(float delta);		
 
-		void Render()
-		{
-			for (std::shared_ptr <Mesh> mesh : meshes)
-			{
-				mesh->Render();
-			}
-		}
+        void Render(class View& view);
 
 		~Model() 
 		{

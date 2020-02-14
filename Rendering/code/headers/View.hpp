@@ -43,11 +43,7 @@
 
             Color_Buffer               Color_buffer;
             Rasterizer< Color_Buffer > rasterizer;
-
-            Vertex_Buffer     original_vertices;
-            Index_Buffer      original_indices;
-            Vertex_Colors     original_colors;
-            Vertex_Buffer     transformed_vertices;
+            
             vector< Point4i > display_vertices;
 
         public:
@@ -57,9 +53,25 @@
             void update ();
             void paint  ();
 
-        private:
+            size_t get_width() 
+            {
+                return width;
+            }
 
-            bool is_frontface (const Vertex * const projected_vertices, const int * const indices);
+            size_t get_height() 
+            {
+                return height;
+            }
+
+            Rasterizer<Color_Buffer_Rgba8888> & get_rasterizer()
+            {
+                return rasterizer;
+            }
+
+            std::vector<toolkit::Point4i>& get_display_vertices()
+            {
+                return display_vertices;
+            }
 
         };
 

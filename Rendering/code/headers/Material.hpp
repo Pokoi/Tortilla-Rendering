@@ -28,6 +28,7 @@
  */
 
 #pragma once
+#include <Color_Buffer_Rgba8888.hpp>
 
 namespace Rendering3D
 {
@@ -35,10 +36,16 @@ namespace Rendering3D
 	class Material
 	{
 		// Color
-
+        Color_Buffer_Rgba8888::Color color;
 		// Texture
 
 		// ka, kd, ks
+
+    public:
+        Color_Buffer_Rgba8888::Color get_color()
+        {
+            return color;
+        }
 
 	};
 }

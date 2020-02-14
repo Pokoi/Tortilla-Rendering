@@ -32,9 +32,12 @@
 #include <vector>					// For collections
 #include <memory>					// For shared_ptr
 #include <Material.hpp>				// For Material reference
+#include <Point.hpp>        // For frontface check
+
 
 namespace Rendering3D
 {
+  
 	class Mesh
 	{
 		std::vector<int> original_vertices_indices;
@@ -54,6 +57,11 @@ namespace Rendering3D
 				class Model    &	owner
 			);
 
-		void Render();
+		void Render(class View & view);
+
+
+    private:
+
+        bool is_frontface(const toolkit::Point4f* const projected_vertices, const int* const indices);
 	};
 }
