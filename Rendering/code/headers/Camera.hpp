@@ -38,7 +38,7 @@ namespace Rendering3D
     class Camera
     {
         Transform transform;
-        toolkit::Projection3f projection;
+		toolkit::Projection3f projection{ 5, 15, 20, 1 };
 
     public:
 

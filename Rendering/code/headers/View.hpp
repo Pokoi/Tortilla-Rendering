@@ -17,6 +17,9 @@
     #include "Rasterizer.hpp"
     #include "Color_Buffer_Rgb565.hpp"
     #include "Color_Buffer_Rgba8888.hpp"
+	
+	#include <map>				// For model collection
+	#include <Model.hpp>		// For model collection
 
     namespace Rendering3D
     {
@@ -42,9 +45,8 @@
             size_t height;
 
             Color_Buffer               Color_buffer;
-            Rasterizer< Color_Buffer > rasterizer;
+            Rasterizer< Color_Buffer > rasterizer;           
             
-            vector< Point4i > display_vertices;
 
         public:
 
@@ -63,15 +65,10 @@
                 return height;
             }
 
-            Rasterizer<Color_Buffer_Rgba8888> & get_rasterizer()
-            {
-                return rasterizer;
-            }
-
-            std::vector<toolkit::Point4i>& get_display_vertices()
-            {
-                return display_vertices;
-            }
+			Rasterizer<Color_Buffer_Rgba8888>& get_rasterizer()
+			{
+				return rasterizer;
+			}
 
         };
 

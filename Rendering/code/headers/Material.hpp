@@ -36,7 +36,7 @@ namespace Rendering3D
 	class Material
 	{
 		// Color
-        Color_Buffer_Rgba8888::Color color;
+		Color_Buffer_Rgba8888::Color color{ 100,100,100,100 };
 		// Texture
 
 		// ka, kd, ks

@@ -49,13 +49,13 @@ namespace Rendering3D
 				std::vector<int>	vertices_indices,
 				std::vector<int>	normals_indices,
 				std::vector<int>	textures_coord_indices,
-				class Model& owner
+				Model * owner
 			)		
 	{
 		original_vertices_indices			 = vertices_indices;
 		original_normals_indices			 = normals_indices;
 		original_texture_coordinates_indices = textures_coord_indices;
-		model								 = std::make_shared<Model>(owner);
+		model								 = owner;		
 	}
 	
 	
@@ -73,10 +73,10 @@ namespace Rendering3D
         toolkit::Translation3f    translation   = toolkit::Translation3f(float(width / 2), float(height / 2), 0.f);
         
         toolkit::Transformation3f transformation = translation * scaling;
-
-        for (int index : original_vertices_indices)
+        
+		for ( int i = 0; i < original_vertices_indices.size(); ++i)
         {
-            view.get_display_vertices()[index] = Point4i(toolkit::Matrix44f(transformation) * toolkit::Matrix41f(model->get_transformed_vertices()[index]));
+            model->get_display_vertices()[original_vertices_indices[i]] = Point4i(toolkit::Matrix44f(transformation) * toolkit::Matrix41f(model->get_transformed_vertices()[original_vertices_indices[i]]));
         }
 
         // Clipping and Rendering
@@ -84,28 +84,29 @@ namespace Rendering3D
         {
             if (is_frontface(model->get_transformed_vertices().data(), indices))
             {
-
+				/*
                 // Clip polygons
                 std::vector<toolkit::Point4i> clipped_vertices;
                 static const int clipped_indices[] = { 0,1,2,3,4,5,6,7,8,9 };
 
                 int vertex_count = Clipping::get().polygon_clipper
                 (
-                    view.get_display_vertices().data(),
+                    model->get_display_vertices().data(),
                     indices,
                     indices + 3,
                     width,
                     height,
                     clipped_vertices
                 );
-
+				*/
                 // Render
-                if (vertex_count >= 3)
-                {
+                //if (vertex_count >= 3)
+                //{
+                    view.get_rasterizer().set_color(material.get_color());
+                   // view.get_rasterizer().fill_convex_polygon_z_buffer(clipped_vertices.data(), clipped_indices, clipped_indices + vertex_count);
+					view.get_rasterizer().fill_convex_polygon_z_buffer(model->get_display_vertices().data(), indices, indices + 3);
 
-                    view.get_rasterizer().set_color(material->get_color());
-                    view.get_rasterizer().fill_convex_polygon_z_buffer(clipped_vertices.data(), clipped_indices, clipped_indices + vertex_count);
-                }
+                //}
             }
         }
 	}
@@ -119,15 +120,3 @@ namespace Rendering3D
         return ((v1[0] - v0[0]) * (v2[1] - v0[1]) - (v2[0] - v0[0]) * (v1[1] - v0[1]) > 0.f);
     }
 }
-
-
-//anotaciones para el recorte de triángulos
-/*
-Se recomienda hacerlo en una clase aparte
-
-{
-	
-
-}
-
-*/

@@ -37,15 +37,15 @@
 
 namespace Rendering3D
 {
-  
+
 	class Mesh
 	{
 		std::vector<int> original_vertices_indices;
 		std::vector<int> original_normals_indices;
 		std::vector<int> original_texture_coordinates_indices;
 		
-		std::shared_ptr<Material>		material;
-		std::shared_ptr<class Model>	model;
+		Material		material;
+		class Model*	model;
 			
 
 	public:
@@ -54,7 +54,7 @@ namespace Rendering3D
 				std::vector<int>	vertices_indices,
 				std::vector<int>	normals_indices,
 				std::vector<int>	textures_coord_indices,
-				class Model    &	owner
+				class Model    *	owner
 			);
 
 		void Render(class View & view);

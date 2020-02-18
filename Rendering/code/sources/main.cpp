@@ -28,7 +28,7 @@ int main ()
     View   view  (window_width, window_height);
 
 
-	//Model model("head.obj");
+	Model model("head.obj");
 
     // Initialization:
 
@@ -70,6 +70,7 @@ int main ()
         // Repaint the view:
 
         view.paint ();
+		model.Render(view);
 
         // Swap the OpenGL buffers:
 

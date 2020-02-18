@@ -84,6 +84,27 @@ namespace Rendering3D
             }
         }
 
+		toolkit::Point4i intersection_point(toolkit::Point4i other_origin, toolkit::Point4i other_end)
+		{
+			// Line of this limit is a1x + b1y = c1
+			double a1 = end.coordinates().get_values()[1] - origin.coordinates().get_values()[1];
+			double b1 = origin.coordinates().get_values()[0] - end.coordinates().get_values()[0];
+			double c1 = a1 * (origin.coordinates().get_values()[0]) + b1 * (origin.coordinates().get_values()[1]);
+		
+			// Line between the given point is a2x + b2y = c2
+			double a2 = other_end.coordinates().get_values()[1] - other_origin.coordinates().get_values()[1];
+			double b2 = other_origin.coordinates().get_values()[0] - other_end.coordinates().get_values()[0];
+			double c2 = a2 * (other_origin.coordinates().get_values()[0]) + b2 * (other_origin.coordinates().get_values()[1]);
+
+			double determinant = a1 * b2 - a2 * b1;
+			
+			double x = (b2 * c1 - b1 * c2) / determinant;
+			double y = (a1 * c2 - a2 * c1) / determinant;
+
+			return { {(int)x,(int)y,1,1} };
+		
+		}
+
     };
 
     class Clipping
@@ -123,15 +144,20 @@ namespace Rendering3D
             }
             
             // Bottom limit check
-            check_bottom_limit(input, output, { { {0,0,0,1} }, { { viewport_width, 0, 0, 1 } }, LimitTypes::horizontal });
+            check_bottom_limit(input, output, { { {0, 0, 0, 1} }, { { viewport_width, 0, 0, 1 } }, LimitTypes::horizontal });
             reset_input_output(input, output);
 
             // Right limit check
-
+			check_right_limit(input, output, { { {viewport_width, 0, 0, 1} }, { { viewport_width, viewport_height, 0, 1 } }, LimitTypes::vertical });
+			reset_input_output(input, output);
+			
             // Top limit check
+			check_top_limit(input, output, { { {0, viewport_height, 0, 1} }, { { viewport_width, viewport_height, 0, 1 } }, LimitTypes::horizontal });
+			reset_input_output(input, output);
 
             // Left limit check
-
+			check_left_limit(input, output, { { {0, 0, 0, 1} }, { { 0, viewport_height, 0, 1 } }, LimitTypes::vertical });
+			reset_input_output(input, output);
 
             // Copy to clipped_vertices
             for (toolkit::Point4i vertex : input)
@@ -160,7 +186,7 @@ namespace Rendering3D
                 // Check if point and next point intersects limit                
                 if (limit.intersects(input[index], input[index + 1]))
                 {
-
+					output.push_back(limit.intersection_point(input[index], input[index + 1]));
                 }
                     // If intersects, add the intersection point to output
 
@@ -175,11 +201,124 @@ namespace Rendering3D
             // Check if last point and first point intersects limit                
             if (limit.intersects(input[input.size() - 1], input[0]))
             {
-
-            }           
+				output.push_back(limit.intersection_point(input[input.size() - 1], input[0]));
+            }          
                 
         }
 
+		void check_right_limit(
+			std::vector<toolkit::Point4i>& input,
+			std::vector<toolkit::Point4i>& output,
+			Limit limit
+		)
+		{
+
+			for (int index = 0; index < input.size() - 1; ++index)
+			{
+				// Check if point is inside
+				if (limit < input[index])
+				{
+					output.push_back(input[index]);
+				}
+
+				// Check if point and next point intersects limit                
+				if (limit.intersects(input[index], input[index + 1]))
+				{
+					output.push_back(limit.intersection_point(input[index], input[index + 1]));
+				}
+				// If intersects, add the intersection point to output
+
+			}
+
+			// Check if last point is inside
+			if (limit < input[input.size() - 1])
+			{
+				output.push_back(input[input.size() - 1]);
+			}
+
+			// Check if last point and first point intersects limit                
+			if (limit.intersects(input[input.size() - 1], input[0]))
+			{
+				output.push_back(limit.intersection_point(input[input.size() - 1], input[0]));
+			}
+
+		}
+
+		void check_top_limit(
+			std::vector<toolkit::Point4i>& input,
+			std::vector<toolkit::Point4i>& output,
+			Limit limit
+		)
+		{
+
+			for (int index = 0; index < input.size() - 1; ++index)
+			{
+				// Check if point is inside
+				if (limit > input[index])
+				{
+					output.push_back(input[index]);
+				}
+
+				// Check if point and next point intersects limit                
+				if (limit.intersects(input[index], input[index + 1]))
+				{
+					output.push_back(limit.intersection_point(input[index], input[index + 1]));
+				}
+				// If intersects, add the intersection point to output
+
+			}
+
+			// Check if last point is inside
+			if (limit > input[input.size() - 1])
+			{
+				output.push_back(input[input.size() - 1]);
+			}
+
+			// Check if last point and first point intersects limit                
+			if (limit.intersects(input[input.size() - 1], input[0]))
+			{
+				output.push_back(limit.intersection_point(input[input.size() - 1], input[0]));
+			}
+
+		}
+
+		void check_left_limit(
+			std::vector<toolkit::Point4i>& input,
+			std::vector<toolkit::Point4i>& output,
+			Limit limit
+		)
+		{
+
+			for (int index = 0; index < input.size() - 1; ++index)
+			{
+				// Check if point is inside
+				if (limit > input[index])
+				{
+					output.push_back(input[index]);
+				}
+
+				// Check if point and next point intersects limit                
+				if (limit.intersects(input[index], input[index + 1]))
+				{
+					output.push_back(limit.intersection_point(input[index], input[index + 1]));
+				}
+				// If intersects, add the intersection point to output
+
+			}
+
+			// Check if last point is inside
+			if (limit > input[input.size() - 1])
+			{
+				output.push_back(input[input.size() - 1]);
+			}
+
+			// Check if last point and first point intersects limit                
+			if (limit.intersects(input[input.size() - 1], input[0]))
+			{
+				output.push_back(limit.intersection_point(input[input.size() - 1], input[0]));
+			}
+
+		}
         
         void reset_input_output(std::vector<toolkit::Point4i>& input, std::vector<toolkit::Point4i>& output)
         {

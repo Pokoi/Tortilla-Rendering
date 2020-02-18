@@ -103,11 +103,14 @@ namespace Rendering3D
 					shapes[s].mesh.material_ids[f];
 				}
 
-				meshes.push_back(std::make_shared<Mesh>(vertices_indices, normals_indices, textures_coord_indices, *this));
+				meshes.push_back(std::make_shared<Mesh>(vertices_indices, normals_indices, textures_coord_indices, this));
 
 			}
 		}
 
+		// Assign the size to the collections
+		transformed_vertices.resize(original_vertices.size());
+		display_vertices.resize(original_vertices.size());
 
 		/////////////////////////////////////////////////////////////////////////////////////
 	}
@@ -127,11 +130,11 @@ namespace Rendering3D
 		static float angle = 0.f;
 
 		// To rotate the model in runtime
-		//	angle += 0.025f 
+		//angle += 0.025f;
 
 		// Modify transformations matrices
 		transform->scaling.set(0.2f);
-		transform->translation.set(0, 0, 0);		 
+		transform->translation.set(0, 0, -10);
 		
 		// Unify transformation matrix with parent transformation
 		toolkit::Transformation3f transformation = get_transform().transformation;
@@ -159,7 +162,7 @@ namespace Rendering3D
     
     void Model::Render(View& view)
     {
-        for (std::shared_ptr <Mesh> mesh : meshes)
+        for (std::shared_ptr <Mesh> & mesh : meshes)
         {
             mesh->Render(view);
         }
