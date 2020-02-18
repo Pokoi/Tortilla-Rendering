@@ -34,6 +34,58 @@
 
 namespace Rendering3D
 {
+    enum class LimitTypes {horizontal, vertical, diagonal};
+
+    struct Limit
+    {
+        toolkit::Point4i origin;
+        toolkit::Point4i end;
+        LimitTypes type;
+
+        Limit(toolkit::Point4i origin, toolkit::Point4i end, LimitTypes type) : origin{ origin }, end{ end }, type{ type }
+        {  }
+
+        bool intersects(toolkit::Point4i other_origin, toolkit::Point4i other_end)
+        {
+            return (*this < other_origin && *this > other_end) || (*this > other_origin && *this < other_end);
+        }
+
+        bool operator < (toolkit::Point4i point)
+        {
+            if (type == LimitTypes::horizontal)
+            {
+                return origin.coordinates().get_values()[1] < point.coordinates().get_values()[1];
+            }
+            else if (type == LimitTypes::vertical)
+            {
+                return origin.coordinates().get_values()[0] < point.coordinates().get_values()[0];
+            }
+            else if (type == LimitTypes::diagonal)
+            {
+                // To implement
+                return false;
+            }
+        }
+
+        bool operator > (toolkit::Point4i point)
+        {
+            if (type == LimitTypes::horizontal)
+            {
+                return origin.coordinates().get_values()[1] > point.coordinates().get_values()[1];
+            }
+            else if (type == LimitTypes::vertical)
+            {
+                return origin.coordinates().get_values()[0] > point.coordinates().get_values()[0];
+            }
+            else if (type == LimitTypes::diagonal)
+            {
+                // To implement
+                return false;
+            }
+        }
+
+    };
+
     class Clipping
     {
 
@@ -53,15 +105,86 @@ namespace Rendering3D
     public:
 
         int polygon_clipper(
-            toolkit::Point4i* vertices,
-            const int* first,
-            const int* last,
-            const int	viewport_width,
-            const int	viewport_height,
-            toolkit::Point4i* clipped_vertices
+            toolkit::Point4i           *    vertices,
+            const int                  *    first,
+            const int                  *    last,
+            const int	                    viewport_width,
+            const int	                    viewport_height,
+            std::vector<toolkit::Point4i> & clipped_vertices
         )
         {
-            return -1;
+            std::vector<toolkit::Point4i> input;
+            std::vector<toolkit::Point4i> output;
+            
+            // Set the first input with all the vertices of the polygon
+            for (const int* index = first; index < last; ++index)
+            {
+                input.push_back(vertices[*index]);
+            }
+            
+            // Bottom limit check
+            check_bottom_limit(input, output, { { {0,0,0,1} }, { { viewport_width, 0, 0, 1 } }, LimitTypes::horizontal });
+            reset_input_output(input, output);
+
+            // Right limit check
+
+            // Top limit check
+
+            // Left limit check
+
+
+            // Copy to clipped_vertices
+            for (toolkit::Point4i vertex : input)
+            {
+                clipped_vertices.push_back(vertex);
+            }
+
+            return clipped_vertices.size();
+        }
+
+        void check_bottom_limit   (
+                                        std::vector<toolkit::Point4i>& input,
+                                        std::vector<toolkit::Point4i>& output,
+                                        Limit limit
+                                   )
+        {           
+            
+            for (int index = 0; index < input.size() - 1; ++index)
+            {           
+                // Check if point is inside
+                if (limit < input[index])
+                {
+                    output.push_back(input[index]);
+                }
+
+                // Check if point and next point intersects limit                
+                if (limit.intersects(input[index], input[index + 1]))
+                {
+
+                }
+                    // If intersects, add the intersection point to output
+
+            }
+
+            // Check if last point is inside
+            if (limit < input[input.size() - 1])
+            {
+                output.push_back(input[input.size() - 1]);
+            }
+
+            // Check if last point and first point intersects limit                
+            if (limit.intersects(input[input.size() - 1], input[0]))
+            {
+
+            }           
+                
+        }
+
+        
+        void reset_input_output(std::vector<toolkit::Point4i>& input, std::vector<toolkit::Point4i>& output)
+        {
+            input.swap(output);
+            output.clear();
         }
 
     };

@@ -50,5 +50,7 @@ namespace Rendering3D
         {
             transformation = transformation * other.transformation;
         }
+
+        ~Transform() {}
     };
 }

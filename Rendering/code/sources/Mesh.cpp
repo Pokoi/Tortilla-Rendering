@@ -74,10 +74,10 @@ namespace Rendering3D
         
         toolkit::Transformation3f transformation = translation * scaling;
 
-        for (size_t index = 0, number_of_vertices = model->get_transformed_vertices().size(); index < number_of_vertices; index++)
+        for (int index : original_vertices_indices)
         {
             view.get_display_vertices()[index] = Point4i(toolkit::Matrix44f(transformation) * toolkit::Matrix41f(model->get_transformed_vertices()[index]));
-        }            
+        }
 
         // Clipping and Rendering
         for (int* indices = original_vertices_indices.data(), *end = indices + original_vertices_indices.size(); indices < end; indices += 3)
@@ -86,7 +86,7 @@ namespace Rendering3D
             {
 
                 // Clip polygons
-                toolkit::Point4i clipped_vertices[10];
+                std::vector<toolkit::Point4i> clipped_vertices;
                 static const int clipped_indices[] = { 0,1,2,3,4,5,6,7,8,9 };
 
                 int vertex_count = Clipping::get().polygon_clipper
@@ -104,7 +104,7 @@ namespace Rendering3D
                 {
 
                     view.get_rasterizer().set_color(material->get_color());
-                    view.get_rasterizer().fill_convex_polygon_z_buffer(clipped_vertices, clipped_indices, clipped_indices + vertex_count);
+                    view.get_rasterizer().fill_convex_polygon_z_buffer(clipped_vertices.data(), clipped_indices, clipped_indices + vertex_count);
                 }
             }
         }
