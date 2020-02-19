@@ -20,6 +20,9 @@
 	
 	#include <map>				// For model collection
 	#include <Model.hpp>		// For model collection
+    #include <string>
+
+    #include <Camera.hpp>       // For camera reference
 
     namespace Rendering3D
     {
@@ -45,7 +48,11 @@
             size_t height;
 
             Color_Buffer               Color_buffer;
-            Rasterizer< Color_Buffer > rasterizer;           
+            Rasterizer< Color_Buffer > rasterizer; 
+
+            Camera camera;
+
+            std::map<std::string, std::shared_ptr<Model>> models;
             
 
         public:
@@ -69,6 +76,14 @@
 			{
 				return rasterizer;
 			}
+
+            Camera& get_camera()
+            {
+                return camera;
+            }
+
+            void clear();
+            void swap();
 
         };
 

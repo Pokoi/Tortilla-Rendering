@@ -71,10 +71,16 @@
 
             void clear ()
             {
-                for (Color * c = color_buffer.colors (), * end = c + color_buffer.size (); c < end; c++)
+                color_buffer.set_color(150, 150, 150);
+
+                for (int offset = 0; offset < color_buffer.size(); ++offset)
                 {
-                    *c = 0;
+                    color_buffer.set_pixel(offset);
                 }
+                /*for (Color * c = color_buffer.colors (), * end = c + color_buffer.size (); c < end; c++)
+                {
+                    *c = 0xaaaaaa;
+                }*/
 
                 for (int * z = z_buffer.data (), * end = z + z_buffer.size (); z != end; z++)
                 {

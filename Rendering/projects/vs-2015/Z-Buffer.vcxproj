@@ -57,7 +57,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)\..\..\libraries\cpp-toolkit\headers;$(SolutionDir)\..\..\libraries\sfml-2.3-vs-2015\include;$(SolutionDir)\..\..\libraries\gl\headers;$(SolutionDir)\..\..\libraries\tinyobj;$(SolutionDir)\..\..\code\headers</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)\..\..\libraries\sfml-2.3-vs-2015\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>sfml-main-d.lib;sfml-system-s-d.lib;sfml-window-s-d.lib;winmm.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -84,7 +84,7 @@
       <StructMemberAlignment>8Bytes</StructMemberAlignment>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>

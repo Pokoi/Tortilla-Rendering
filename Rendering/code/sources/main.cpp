@@ -66,11 +66,15 @@ int main ()
         // Update the view:
 
         view.update ();
+        model.Update(0, view);
 
         // Repaint the view:
 
-        view.paint ();
+        //view.paint ();
+
+        view.clear();
 		model.Render(view);
+        view.swap();
 
         // Swap the OpenGL buffers:
 

@@ -48,9 +48,15 @@ namespace Rendering3D
 
         void operator * (const Transform& other)
         {
+            transformation = get_transformation();                          // ????
             transformation = transformation * other.transformation;
         }
 
-        ~Transform() {}
+        toolkit::Transformation3f get_transformation()
+        {
+            transformation = translation  * rotation_x * rotation_y * rotation_z * scaling;
+            return transformation;
+        }
+
     };
 }

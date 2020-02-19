@@ -41,6 +41,8 @@
 
 #include <Transform.hpp>    // For Transform
 
+#include <View.hpp>
+
 namespace Rendering3D
 {
 	   	 
@@ -89,13 +91,21 @@ namespace Rendering3D
 						tinyobj::real_t		nz  = attrib.normals[3 * idx.normal_index + 2];
 						//tinyobj::real_t		tx  = attrib.texcoords[2 * idx.texcoord_index + 0];
 						//tinyobj::real_t		ty  = attrib.texcoords[2 * idx.texcoord_index + 1];	
-												
-						original_vertices			.push_back	({ { vx, vy, vz, 1	} });
-						original_normals			.push_back	({ { nx, ny, nz, 1	} });
+						
+                        toolkit::Point4f vertex({ vx, vy, vz, 1});
+                        toolkit::Point4f normal({ nx, ny, nz, 1 });
+
+                        // Only save the vertex one time
+                        if (std::find(original_vertices.begin(), original_vertices.end(), vertex) == original_vertices.end())
+                        {
+						    original_vertices.push_back	({ { vx, vy, vz, 1	} });
+						    original_normals.push_back	({ { nx, ny, nz, 1	} });
+                        }
+                                               
 						//original_texture_coordinates.push_back	({ { tx, ty, 1		} });
 
-						vertices_indices			.push_back(idx.vertex_index);
-						normals_indices				.push_back(idx.normal_index);
+						vertices_indices.push_back(idx.vertex_index);
+						normals_indices.push_back(idx.normal_index);
 						//textures_coord_indices		.push_back(idx.texcoord_index);
 					}
 
@@ -110,12 +120,14 @@ namespace Rendering3D
 
 		// Assign the size to the collections
 		transformed_vertices.resize(original_vertices.size());
+        transformed_normals.resize(original_normals.size());
 		display_vertices.resize(original_vertices.size());
 
 		/////////////////////////////////////////////////////////////////////////////////////
+
 	}
 
-	const Transform Model::get_transform()
+	Transform Model::get_transform()
 	{
 		if (parent)
 		{
@@ -125,7 +137,7 @@ namespace Rendering3D
 		return *transform;
 	}
 
-	void Model::Update(float delta)
+	void Model::Update(float delta, View & view)
 	{
 		static float angle = 0.f;
 
@@ -133,31 +145,40 @@ namespace Rendering3D
 		//angle += 0.025f;
 
 		// Modify transformations matrices
-		transform->scaling.set(0.2f);
+		transform->scaling.set(0.1f);
 		transform->translation.set(0, 0, -10);
 		
 		// Unify transformation matrix with parent transformation
-		toolkit::Transformation3f transformation = get_transform().transformation;
+        toolkit::Transformation3f transformation = view.get_camera().get_projection() * get_transform().get_transformation();
+            //view.get_camera().get_projection();
 
 		// Transformation per vertex
 		for (size_t index = 0; index < original_vertices.size(); ++index)
 		{
-			toolkit::Point4f& vertex = transformed_vertices[index] = toolkit::Matrix44f(transformation) * toolkit::Matrix41f(original_vertices[index]);
+			toolkit::Point4f& vertex = transformed_vertices[index]  = toolkit::Matrix44f(transformation) * toolkit::Matrix41f(original_vertices[index]);
+            toolkit::Point4f& normal = transformed_normals[index]   = toolkit::Matrix44f(transformation) * toolkit::Matrix41f(original_normals[index]);
+			
+            // Normalize last value for perspective transformation
+			float vertex_divisor = 1.f / vertex[3];
 
-			// Normalize last value for perspective transformation
-			float divisor = 1.f / vertex[3];
-
-			vertex[0] *= divisor;
-			vertex[1] *= divisor;
-			vertex[2] *= divisor;
+			vertex[0] *= vertex_divisor;
+			vertex[1] *= vertex_divisor;
+			vertex[2] *= vertex_divisor;
 			vertex[3]  = 1.f;
+
+            float normal_divisor = 1.f / normal[3];
+
+            vertex[0] *= normal_divisor;
+            vertex[1] *= normal_divisor;
+            vertex[2] *= normal_divisor;
+            vertex[3] = 1.f;
 		}
 
 		//If parent -> transformation * parent transformation
 		// else -> transformation * inverse camera * proyection
 		
 		// Modelo -> Escena -> iluminación -> Camera -> Proyección -> v/w -> NDC -> Viewport
-	
+	        
 	}
     
     void Model::Render(View& view)

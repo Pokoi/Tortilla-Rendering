@@ -43,6 +43,16 @@ namespace Rendering3D
         rasterizer.clear();
 
         rasterizer.get_color_buffer ().gl_draw_pixels (0, 0);
-    }    
+    }
+
+    void View::clear()
+    {
+        rasterizer.clear();
+    }
+
+    void View::swap()
+    {
+        rasterizer.get_color_buffer().gl_draw_pixels(0, 0);
+    }
 
 }

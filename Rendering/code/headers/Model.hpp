@@ -48,9 +48,13 @@ namespace Rendering3D
 		std::vector<toolkit::Point4f>				original_normals;
 		std::vector<toolkit::Point3f>				original_texture_coordinates;
 		std::vector<Color_Buffer_Rgba8888::Color>	original_colors;
-		std::vector<toolkit::Point4f>				transformed_vertices;
-		std::vector<toolkit::Point4i>				display_vertices;
-		std::shared_ptr<Model>						parent;
+		
+        std::vector<toolkit::Point4f>				transformed_vertices;
+        std::vector<toolkit::Point4f>               transformed_normals;
+		
+        std::vector<toolkit::Point4i>				display_vertices;
+		
+        std::shared_ptr<Model>						parent;
 
 		Transform 		*							transform;
 
@@ -68,14 +72,14 @@ namespace Rendering3D
 			return display_vertices;
 		}
 
-		const Transform get_transform();
+		Transform get_transform();
 
         std::vector<toolkit::Point4f> & get_transformed_vertices()
         {
             return transformed_vertices;
         }
 
-		void Update(float delta);		
+		void Update(float delta, class View& view);		
 
         void Render(class View& view);
 	
