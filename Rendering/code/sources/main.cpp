@@ -28,7 +28,7 @@ int main ()
     View   view  (window_width, window_height);
 
 
-	Model model("head.obj");
+	Model model("bunny.obj");
 
     // Initialization:
 

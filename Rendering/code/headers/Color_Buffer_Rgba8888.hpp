@@ -54,6 +54,14 @@
                     data.value = uint32_t(value);
                     return (*this);
                 }
+
+				void operator * (float scalar)
+				{
+					data.component.r *= scalar;
+					data.component.g *= scalar;
+					data.component.b *= scalar;
+				}
+
             };
 
             typedef std::vector< Color > Buffer;
@@ -128,6 +136,8 @@
                 glRasterPos2i (raster_x, raster_y);
                 glDrawPixels  (width, height, GL_RGBA, GL_UNSIGNED_BYTE, colors ());
             }
+
+			
 
         };
 

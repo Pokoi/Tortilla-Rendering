@@ -43,6 +43,8 @@
 
 #include <View.hpp>
 
+#include <cmath>
+
 namespace Rendering3D
 {
 	   	 
@@ -74,6 +76,29 @@ namespace Rendering3D
 				std::vector<int> normals_indices;
                 std::vector<int> textures_coord_indices;
 
+				std::vector<int> indices;
+				
+				indices.resize(shapes[s].mesh.indices.size());
+
+				for (int index = 0; index < indices.size(); ++index)
+				{
+					int vertex_index = shapes[s].mesh.indices[index].vertex_index;
+					int normal_index = shapes[s].mesh.indices[index].normal_index;
+					
+					tinyobj::real_t		vx = attrib.vertices[3 * vertex_index + 0];
+					tinyobj::real_t		vy = attrib.vertices[3 * vertex_index + 1];
+					tinyobj::real_t		vz = attrib.vertices[3 * vertex_index + 2];
+					tinyobj::real_t		nx = attrib.normals[3 * normal_index + 0];
+					tinyobj::real_t		ny = attrib.normals[3 * normal_index + 1];
+					tinyobj::real_t		nz = attrib.normals[3 * normal_index + 2];
+					
+					original_vertices.push_back(attrib.vertices[]);
+				}
+
+				
+
+
+
 				// For each face in the shape
 				for (size_t f = 0; f < shapes[s].mesh.num_face_vertices.size(); ++f)
 				{
@@ -93,7 +118,7 @@ namespace Rendering3D
 						//tinyobj::real_t		ty  = attrib.texcoords[2 * idx.texcoord_index + 1];	
 						
                         toolkit::Point4f vertex({ vx, vy, vz, 1});
-                        toolkit::Point4f normal({ nx, ny, nz, 1 });
+                        toolkit::Vector4f normal({ nx, ny, nz, 1 });
 
                         // Only save the vertex one time
                         if (std::find(original_vertices.begin(), original_vertices.end(), vertex) == original_vertices.end())
@@ -145,11 +170,11 @@ namespace Rendering3D
 		angle += 0.025f;
 
 		// Modify transformations matrices
-		transform->scaling.set(0.1f);
+		transform->scaling.set(1.f);
         transform->rotation_y.set<toolkit::Rotation3f::AROUND_THE_Y_AXIS>(angle);
         transform->rotation_x.set<toolkit::Rotation3f::AROUND_THE_X_AXIS>(angle);
         transform->rotation_z.set<toolkit::Rotation3f::AROUND_THE_Z_AXIS>(angle);
-		transform->translation.set(0, 0, -30);
+		transform->translation.set(0, 0, -5);
 		
 		// Unify transformation matrix with parent transformation
         transformation = view.get_camera().get_projection() * get_transform().get_transformation();
@@ -159,7 +184,7 @@ namespace Rendering3D
 		for (size_t index = 0; index < original_vertices.size(); ++index)
 		{
 			toolkit::Point4f& vertex = transformed_vertices[index]  = toolkit::Matrix44f(transformation) * toolkit::Matrix41f(original_vertices[index]);
-            toolkit::Point4f& normal = transformed_normals[index]   = toolkit::Matrix44f(transformation) * toolkit::Matrix41f(original_normals[index]);
+            toolkit::Vector4f& normal = transformed_normals[index]   = toolkit::Matrix44f(transformation) * toolkit::Matrix41f(original_normals[index]);
 			
             // Normalize last value for perspective transformation
 			float vertex_divisor = 1.f / vertex[3];
@@ -174,9 +199,16 @@ namespace Rendering3D
             normal[0] *= normal_divisor;
             normal[1] *= normal_divisor;
             normal[2] *= normal_divisor;
-            normal[3] = 1.f;
-            
-		}            	
+            normal[3] = 1.f;    
+			
+			float v = std::sqrt(std::pow(normal[0],2) + std::pow(normal[1],2) + std::pow(normal[2], 2));
+			v = 1 / v;
+			normal[0] *= v;
+			normal[1] *= v;
+			normal[2] *= v;
+		}
+
+
 	        
 	}
     

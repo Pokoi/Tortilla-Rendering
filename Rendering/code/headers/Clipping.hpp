@@ -101,7 +101,10 @@ namespace Rendering3D
 			double x = (b2 * c1 - b1 * c2) / determinant;
 			double y = (a1 * c2 - a2 * c1) / determinant;
 
-			return { {(int)x,(int)y,1,1} };
+			// Calculate the z coordinate in base of interpolation progress
+			double z = other_origin.coordinates().get_values()[2] + (x / (other_end.coordinates().get_values()[0] - other_origin.coordinates().get_values()[0]))* (other_end.coordinates().get_values()[2] - other_origin.coordinates().get_values()[2]);
+
+			return { {(int)x,(int)y,(int)z,1} };
 		
 		}
 

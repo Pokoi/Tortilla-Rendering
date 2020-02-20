@@ -31,6 +31,7 @@
 
 #include <vector>						// For collections
 #include <Point.hpp>					// For collections
+#include <Vector.hpp>					// For normals
 
 #include <string>						// For path and name
 #include <memory>						// For shared_ptr
@@ -47,11 +48,11 @@ namespace Rendering3D
 		std::vector<std::shared_ptr<Mesh>>			meshes;
 		
 		std::vector<toolkit::Point4f>				original_vertices;
-		std::vector<toolkit::Point4f>				original_normals;
+		std::vector<toolkit::Vector4f>				original_normals;
 		std::vector<toolkit::Point3f>				original_texture_coordinates;
 		
         std::vector<toolkit::Point4f>				transformed_vertices;
-        std::vector<toolkit::Point4f>               transformed_normals;
+        std::vector<toolkit::Vector4f>               transformed_normals;
         
         std::vector<toolkit::Point4i>				display_vertices;
 		
@@ -87,12 +88,12 @@ namespace Rendering3D
             return transformed_vertices;
         }
 
-        std::vector<toolkit::Point4f> & get_original_normals()
+        std::vector<toolkit::Vector4f> & get_original_normals()
         {
             return original_normals;
         }
 
-        std::vector<toolkit::Point4f> & get_transformed_normals()
+        std::vector<toolkit::Vector4f> & get_transformed_normals()
         {
             return transformed_normals;
         }

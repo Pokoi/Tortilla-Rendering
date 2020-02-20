@@ -23,6 +23,7 @@
     #include <string>
 
     #include <Camera.hpp>       // For camera reference
+	#include <Light.hpp>		// for light referece
 
     namespace Rendering3D
     {
@@ -50,7 +51,10 @@
             Color_Buffer               Color_buffer;
             Rasterizer< Color_Buffer > rasterizer; 
 
-            Camera camera;
+            Camera	camera;
+			Light	light;
+
+			float ambient_intensity = 0.f;
 
             std::map<std::string, std::shared_ptr<Model>> models;
             
@@ -81,6 +85,16 @@
             {
                 return camera;
             }
+
+			Light& get_light()
+			{
+				return light;
+			}
+
+			float get_ambient_intensity()
+			{
+				return ambient_intensity;
+			}
 
             void clear();
             void swap();

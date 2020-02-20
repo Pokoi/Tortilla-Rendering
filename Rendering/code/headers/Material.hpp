@@ -39,6 +39,8 @@ namespace Rendering3D
 		// Color
 		Color_Buffer_Rgba8888::Color original_color{ 100,100,100,255};
         std::vector<Color_Buffer_Rgba8888::Color>	transformed_colors;
+
+		Color_Buffer_Rgba8888::Color average_color{100,100,100,255};
 		// Texture
 
 		// ka, kd, ks
@@ -50,15 +52,34 @@ namespace Rendering3D
             transformed_colors.resize(colors_size);
         }
 
-        Color_Buffer_Rgba8888::Color get_color()
+        Color_Buffer_Rgba8888::Color & get_color()
         {
             return original_color;
         }
+
+		Color_Buffer_Rgba8888::Color& get_average_color()
+		{
+			return average_color;
+		}
 
         std::vector<Color_Buffer_Rgba8888::Color>& get_transformed_colors()
         {
             return transformed_colors;
         }
 
+		void calculate_average_color(const int * first, const int * last)
+		{
+			int count = 0;
+			int total_r = 0, total_g = 0, total_b = 0;
+
+			for (const int* index = first; index < last; ++index, ++count)
+			{
+				total_r += transformed_colors[*index].data.component.r;
+				total_g += transformed_colors[*index].data.component.g;
+				total_b += transformed_colors[*index].data.component.b;				
+			}
+
+			average_color.set(total_r / count, total_g / count, total_b / count);
+		}
 	};
 }

@@ -30,4 +30,39 @@
 #pragma once
 
 #include <Transform.hpp>
+#include <Color_Buffer_Rgba8888.hpp>
+#include <cmath>
+#include <Point.hpp>
 
+namespace Rendering3D
+{
+
+	class Light
+	{
+		Transform transform;		
+		Color_Buffer_Rgba8888::Color light_color;	
+		
+	public:
+
+		Light() : light_color{ {255,0,0,255} } {}
+
+		toolkit::Vector4f get_direction()
+		{
+			return	{ 
+						{
+							0.5f,
+							0.5f,
+							0.5f
+						}
+					};
+		}
+
+
+		Color_Buffer_Rgba8888::Color get_light_color()
+		{			
+			return light_color;
+		}
+
+
+	};
+}

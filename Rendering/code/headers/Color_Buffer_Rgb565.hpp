@@ -77,7 +77,7 @@
             size_t size () const
             {
                 return (buffer.size ());
-            }
+            }			
 
         public:
 

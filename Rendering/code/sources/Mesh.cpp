@@ -41,6 +41,8 @@
 #include <View.hpp>         // For render
 #include <Clipping.hpp>     // For polygon clipping
 
+#include <Color_Buffer_Rgba8888.hpp> // For illumination
+
 
 namespace Rendering3D
 {
@@ -63,7 +65,7 @@ namespace Rendering3D
 	{
 
         // Ilumination
-        //illuminate(view);        
+        illuminate(view);        
         
         // World Coordinates to Screen Coordinates
         display_coordinates_transformation(view.get_width(), view.get_height());    
@@ -78,6 +80,8 @@ namespace Rendering3D
                 // Clip polygons                
                 std::vector<toolkit::Point4i> clipped_vertices;
                 static const int clipped_indices[] = { 0,1,2,3,4,5,6,7,8,9 };
+				
+				material.calculate_average_color(indices, indices + 3);
                 
                 int vertex_count = Clipping::get().polygon_clipper
                 (
@@ -89,11 +93,10 @@ namespace Rendering3D
                     clipped_vertices
                 );
 				
-
                 // Render
                 if (vertex_count >= 3)
                 {
-                    view.get_rasterizer().set_color(material.get_color());
+                    view.get_rasterizer().set_color(material.get_average_color());
                     
                     // With clipping
                     view.get_rasterizer().fill_convex_polygon_z_buffer(clipped_vertices.data(), clipped_indices, clipped_indices + vertex_count);
@@ -117,40 +120,33 @@ namespace Rendering3D
     void Mesh::illuminate(View& view)
     {
         auto normals = model->get_original_normals();
-        auto & transformed_normals = model->get_transformed_normals();
-
-        toolkit::Vector4f light({ 0.5, -0.2, -0.8, 1 });
+        auto & transformed_normals = model->get_transformed_normals();        
 
         for (int i = 0; i < original_normals_indices.size(); ++i)
         {
-            transformed_normals[original_normals_indices[i]] = toolkit::Matrix44f(model->get_transformation()) * toolkit::Matrix41f(normals[original_normals_indices[i]]);
-            
-            float normal_divisor = 1.f / transformed_normals[original_normals_indices[i]][3];
+			Color_Buffer_Rgba8888::Color	diffuse			= material.get_color();
+			float							ambient			= view.get_ambient_intensity();
+			Color_Buffer_Rgba8888::Color	light_color		= view.get_light().get_light_color();
+			toolkit::Vector4f				direction		= view.get_light().get_direction();
+			
+			float multiplier = model->get_transformed_normals()[original_normals_indices[i]].dot_product(direction);			
+			if (multiplier > 1) multiplier = 1;
+			else if (multiplier < 0) multiplier = 0;
 
-            transformed_normals[original_normals_indices[i]][0] *= normal_divisor;
-            transformed_normals[original_normals_indices[i]][1] *= normal_divisor;
-            transformed_normals[original_normals_indices[i]][2] *= normal_divisor;
-            transformed_normals[original_normals_indices[i]][3] = 1.f;  
-            
-            /*
-            float intensity = light.dot_product(transformed_normals[original_normals_indices[i]]);
+			int transformed_blue	= (diffuse.data.component.g * ambient) + (diffuse.data.component.g * light_color.data.component.g * multiplier);
+			int transformed_green	= (diffuse.data.component.b * ambient) + (diffuse.data.component.b * light_color.data.component.b * multiplier);
+			int transformed_red		= (diffuse.data.component.r * ambient) + (diffuse.data.component.r * light_color.data.component.r * multiplier);
 
-            if (intensity < 0.f)
-            {
-                intensity = 0.f;
-            }
-            else if (intensity > 1.f)
-            {
-                intensity = 1.f;
-            }
+			if (transformed_blue > 255) transformed_blue = 255;
+			else if (transformed_blue < 0) transformed_blue = 0;
 
-            material.get_transformed_colors()[original_normals_indices[i]] = { 
-                                                                                material.get_color().data.component.r * intensity,
-                                                                                material.get_color().data.component.g * intensity,
-                                                                                material.get_color().data.component.b * intensity,
-                                                                                material.get_color().data.component.a,
-                                                                             };
-            */
+			if (transformed_green > 255) transformed_green = 255;
+			else if (transformed_green < 0) transformed_green = 0;
+
+			if (transformed_red > 255) transformed_red = 255;
+			else if (transformed_red < 0) transformed_red = 0;
+
+			material.get_transformed_colors()[original_normals_indices[i]].set(transformed_red, transformed_blue, transformed_green);            
         }
 
        
