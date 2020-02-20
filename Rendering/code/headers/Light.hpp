@@ -1,6 +1,6 @@
 /*
- * File: Camera.hpp
- * File Created: 14th February 2020
+ * File: Light.hpp
+ * File Created: 20th February 2020
  * ––––––––––––––––––––––––
  * Author: Jesus Fermin, 'Pokoi', Villar  (hello@pokoidev.com)
  * ––––––––––––––––––––––––
@@ -30,31 +30,4 @@
 #pragma once
 
 #include <Transform.hpp>
-#include <Projection.hpp>
-
-namespace Rendering3D
-{
-
-    class Camera
-    {
-        Transform transform;
-		toolkit::Projection3f projection;
-
-    public:
-
-        Camera() : projection{ 1, 50, 20, (float)800 / (float)600 } {}
-
-        Camera(class View * view);
-
-        toolkit::Projection3f get_projection()
-        {
-            return projection;
-        }
-
-        Transform get_transform()
-        {
-            return transform;
-        }       
-    };
-}
 

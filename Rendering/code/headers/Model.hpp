@@ -31,10 +31,12 @@
 
 #include <vector>						// For collections
 #include <Point.hpp>					// For collections
-#include <Color_Buffer_Rgba8888.hpp>	// For colors
+
 #include <string>						// For path and name
 #include <memory>						// For shared_ptr
 #include <Mesh.hpp>						// For collection of meshes
+
+#include <Transformation.hpp>
 
 namespace Rendering3D
 {
@@ -47,16 +49,17 @@ namespace Rendering3D
 		std::vector<toolkit::Point4f>				original_vertices;
 		std::vector<toolkit::Point4f>				original_normals;
 		std::vector<toolkit::Point3f>				original_texture_coordinates;
-		std::vector<Color_Buffer_Rgba8888::Color>	original_colors;
 		
         std::vector<toolkit::Point4f>				transformed_vertices;
         std::vector<toolkit::Point4f>               transformed_normals;
-		
+        
         std::vector<toolkit::Point4i>				display_vertices;
 		
         std::shared_ptr<Model>						parent;
 
 		Transform 		*							transform;
+
+        toolkit::Transformation3f                   transformation;
 
 	public:
 
@@ -74,9 +77,29 @@ namespace Rendering3D
 
 		Transform get_transform();
 
+        std::vector<toolkit::Point4f>& get_original_vertices()
+        {
+            return original_vertices;
+        }
+
         std::vector<toolkit::Point4f> & get_transformed_vertices()
         {
             return transformed_vertices;
+        }
+
+        std::vector<toolkit::Point4f> & get_original_normals()
+        {
+            return original_normals;
+        }
+
+        std::vector<toolkit::Point4f> & get_transformed_normals()
+        {
+            return transformed_normals;
+        }
+
+        toolkit::Transformation3f get_transformation()
+        {
+            return transformation;
         }
 
 		void Update(float delta, class View& view);		

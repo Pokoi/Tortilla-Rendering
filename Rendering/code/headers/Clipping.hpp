@@ -174,36 +174,38 @@ namespace Rendering3D
                                         Limit limit
                                    )
         {           
-            
-            for (int index = 0; index < input.size() - 1; ++index)
-            {           
-                // Check if point is inside
-                if (limit < input[index])
-                {
-                    output.push_back(input[index]);
+            if (input.size() > 0)
+            {
+
+                for (int index = 0; index < input.size() - 1; ++index)
+                {           
+                    // Check if point is inside
+                    if (limit < input[index])
+                    {
+                        output.push_back(input[index]);
+                    }
+
+                    // Check if point and next point intersects limit                
+                    if (limit.intersects(input[index], input[index + 1]))
+                    {
+					    output.push_back(limit.intersection_point(input[index], input[index + 1]));
+                    }                   
+
                 }
 
-                // Check if point and next point intersects limit                
-                if (limit.intersects(input[index], input[index + 1]))
+                // Check if last point is inside
+                if (limit < input[input.size() - 1])
                 {
-					output.push_back(limit.intersection_point(input[index], input[index + 1]));
+                    output.push_back(input[input.size() - 1]);
                 }
-                    // If intersects, add the intersection point to output
 
-            }
-
-            // Check if last point is inside
-            if (limit < input[input.size() - 1])
-            {
-                output.push_back(input[input.size() - 1]);
-            }
-
-            // Check if last point and first point intersects limit                
-            if (limit.intersects(input[input.size() - 1], input[0]))
-            {
-				output.push_back(limit.intersection_point(input[input.size() - 1], input[0]));
-            }          
+                // Check if last point and first point intersects limit                
+                if (limit.intersects(input[input.size() - 1], input[0]))
+                {
+				    output.push_back(limit.intersection_point(input[input.size() - 1], input[0]));
+                }         
                 
+            }
         }
 
 		void check_right_limit(
@@ -212,36 +214,35 @@ namespace Rendering3D
 			Limit limit
 		)
 		{
+            if (input.size() > 0)
+            {
+                for (int index = 0; index < input.size() - 1; ++index)
+                {
+                    // Check if point is inside
+                    if (limit > input[index])
+                    {
+                        output.push_back(input[index]);
+                    }
 
-			for (int index = 0; index < input.size() - 1; ++index)
-			{
-				// Check if point is inside
-				if (limit < input[index])
-				{
-					output.push_back(input[index]);
-				}
+                    // Check if point and next point intersects limit                
+                    if (limit.intersects(input[index], input[index + 1]))
+                    {
+                        output.push_back(limit.intersection_point(input[index], input[index + 1]));
+                    }
+                }
 
-				// Check if point and next point intersects limit                
-				if (limit.intersects(input[index], input[index + 1]))
-				{
-					output.push_back(limit.intersection_point(input[index], input[index + 1]));
-				}
-				// If intersects, add the intersection point to output
+                // Check if last point is inside
+                if (limit > input[input.size() - 1])
+                {
+                    output.push_back(input[input.size() - 1]);
+                }
 
-			}
-
-			// Check if last point is inside
-			if (limit < input[input.size() - 1])
-			{
-				output.push_back(input[input.size() - 1]);
-			}
-
-			// Check if last point and first point intersects limit                
-			if (limit.intersects(input[input.size() - 1], input[0]))
-			{
-				output.push_back(limit.intersection_point(input[input.size() - 1], input[0]));
-			}
-
+                // Check if last point and first point intersects limit                
+                if (limit.intersects(input[input.size() - 1], input[0]))
+                {
+                    output.push_back(limit.intersection_point(input[input.size() - 1], input[0]));
+                }
+            }
 		}
 
 		void check_top_limit(
@@ -250,36 +251,37 @@ namespace Rendering3D
 			Limit limit
 		)
 		{
+            if (input.size() > 0)
+            {
 
-			for (int index = 0; index < input.size() - 1; ++index)
-			{
-				// Check if point is inside
-				if (limit > input[index])
-				{
-					output.push_back(input[index]);
-				}
+			    for (int index = 0; index < input.size() - 1; ++index)
+			    {
+				    // Check if point is inside
+				    if (limit > input[index])
+				    {
+					    output.push_back(input[index]);
+				    }
 
-				// Check if point and next point intersects limit                
-				if (limit.intersects(input[index], input[index + 1]))
-				{
-					output.push_back(limit.intersection_point(input[index], input[index + 1]));
-				}
-				// If intersects, add the intersection point to output
+				    // Check if point and next point intersects limit                
+				    if (limit.intersects(input[index], input[index + 1]))
+				    {
+					    output.push_back(limit.intersection_point(input[index], input[index + 1]));
+				    }		
 
-			}
+			    }
 
-			// Check if last point is inside
-			if (limit > input[input.size() - 1])
-			{
-				output.push_back(input[input.size() - 1]);
-			}
+			    // Check if last point is inside
+			    if (limit > input[input.size() - 1])
+			    {
+				    output.push_back(input[input.size() - 1]);
+			    }
 
-			// Check if last point and first point intersects limit                
-			if (limit.intersects(input[input.size() - 1], input[0]))
-			{
-				output.push_back(limit.intersection_point(input[input.size() - 1], input[0]));
-			}
-
+			    // Check if last point and first point intersects limit                
+			    if (limit.intersects(input[input.size() - 1], input[0]))
+			    {
+				    output.push_back(limit.intersection_point(input[input.size() - 1], input[0]));
+			    }
+            }
 		}
 
 		void check_left_limit(
@@ -288,36 +290,37 @@ namespace Rendering3D
 			Limit limit
 		)
 		{
+            if (input.size() > 0)
+            {
 
-			for (int index = 0; index < input.size() - 1; ++index)
-			{
-				// Check if point is inside
-				if (limit > input[index])
-				{
-					output.push_back(input[index]);
-				}
+			    for (int index = 0; index < input.size() - 1; ++index)
+			    {
+				    // Check if point is inside
+				    if (limit < input[index])
+				    {
+					    output.push_back(input[index]);
+				    }
 
-				// Check if point and next point intersects limit                
-				if (limit.intersects(input[index], input[index + 1]))
-				{
-					output.push_back(limit.intersection_point(input[index], input[index + 1]));
-				}
-				// If intersects, add the intersection point to output
+				    // Check if point and next point intersects limit                
+				    if (limit.intersects(input[index], input[index + 1]))
+				    {
+					    output.push_back(limit.intersection_point(input[index], input[index + 1]));
+				    }				
+			    }
 
-			}
+			    // Check if last point is inside
+			    if (limit < input[input.size() - 1])
+			    {
+				    output.push_back(input[input.size() - 1]);
+			    }
 
-			// Check if last point is inside
-			if (limit > input[input.size() - 1])
-			{
-				output.push_back(input[input.size() - 1]);
-			}
+			    // Check if last point and first point intersects limit                
+			    if (limit.intersects(input[input.size() - 1], input[0]))
+			    {
+				    output.push_back(limit.intersection_point(input[input.size() - 1], input[0]));
+			    }
 
-			// Check if last point and first point intersects limit                
-			if (limit.intersects(input[input.size() - 1], input[0]))
-			{
-				output.push_back(limit.intersection_point(input[input.size() - 1], input[0]));
-			}
-
+            }
 		}
         
         void reset_input_output(std::vector<toolkit::Point4i>& input, std::vector<toolkit::Point4i>& output)

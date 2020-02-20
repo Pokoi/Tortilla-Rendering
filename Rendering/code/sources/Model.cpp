@@ -72,7 +72,7 @@ namespace Rendering3D
 
 				std::vector<int> vertices_indices;
 				std::vector<int> normals_indices;
-				std::vector<int> textures_coord_indices;				
+                std::vector<int> textures_coord_indices;
 
 				// For each face in the shape
 				for (size_t f = 0; f < shapes[s].mesh.num_face_vertices.size(); ++f)
@@ -98,8 +98,8 @@ namespace Rendering3D
                         // Only save the vertex one time
                         if (std::find(original_vertices.begin(), original_vertices.end(), vertex) == original_vertices.end())
                         {
-						    original_vertices.push_back	({ { vx, vy, vz, 1	} });
-						    original_normals.push_back	({ { nx, ny, nz, 1	} });
+						    original_vertices.push_back	(vertex);
+						    original_normals.push_back	(normal);
                         }
                                                
 						//original_texture_coordinates.push_back	({ { tx, ty, 1		} });
@@ -114,7 +114,7 @@ namespace Rendering3D
 				}
 
 				meshes.push_back(std::make_shared<Mesh>(vertices_indices, normals_indices, textures_coord_indices, this));
-
+               
 			}
 		}
 
@@ -142,17 +142,20 @@ namespace Rendering3D
 		static float angle = 0.f;
 
 		// To rotate the model in runtime
-		//angle += 0.025f;
+		angle += 0.025f;
 
 		// Modify transformations matrices
 		transform->scaling.set(0.1f);
-		transform->translation.set(0, 0, -10);
+        transform->rotation_y.set<toolkit::Rotation3f::AROUND_THE_Y_AXIS>(angle);
+        transform->rotation_x.set<toolkit::Rotation3f::AROUND_THE_X_AXIS>(angle);
+        transform->rotation_z.set<toolkit::Rotation3f::AROUND_THE_Z_AXIS>(angle);
+		transform->translation.set(0, 0, -30);
 		
 		// Unify transformation matrix with parent transformation
-        toolkit::Transformation3f transformation = view.get_camera().get_projection() * get_transform().get_transformation();
-            //view.get_camera().get_projection();
+        transformation = view.get_camera().get_projection() * get_transform().get_transformation();
 
 		// Transformation per vertex
+        
 		for (size_t index = 0; index < original_vertices.size(); ++index)
 		{
 			toolkit::Point4f& vertex = transformed_vertices[index]  = toolkit::Matrix44f(transformation) * toolkit::Matrix41f(original_vertices[index]);
@@ -164,20 +167,16 @@ namespace Rendering3D
 			vertex[0] *= vertex_divisor;
 			vertex[1] *= vertex_divisor;
 			vertex[2] *= vertex_divisor;
-			vertex[3]  = 1.f;
-
+			vertex[3]  = 1.f;            
+            
             float normal_divisor = 1.f / normal[3];
 
-            vertex[0] *= normal_divisor;
-            vertex[1] *= normal_divisor;
-            vertex[2] *= normal_divisor;
-            vertex[3] = 1.f;
-		}
-
-		//If parent -> transformation * parent transformation
-		// else -> transformation * inverse camera * proyection
-		
-		// Modelo -> Escena -> iluminación -> Camera -> Proyección -> v/w -> NDC -> Viewport
+            normal[0] *= normal_divisor;
+            normal[1] *= normal_divisor;
+            normal[2] *= normal_divisor;
+            normal[3] = 1.f;
+            
+		}            	
 	        
 	}
     

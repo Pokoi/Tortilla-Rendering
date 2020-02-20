@@ -41,9 +41,6 @@
 #include <View.hpp>         // For render
 #include <Clipping.hpp>     // For polygon clipping
 
-#include <iostream>
-using namespace std;
-
 
 namespace Rendering3D
 {
@@ -53,12 +50,12 @@ namespace Rendering3D
 				std::vector<int>	normals_indices,
 				std::vector<int>	textures_coord_indices,
 				Model * owner
-			)		
+			): material{vertices_indices.size()}
 	{
 		original_vertices_indices			 = vertices_indices;
 		original_normals_indices			 = normals_indices;
 		original_texture_coordinates_indices = textures_coord_indices;
-		model								 = owner;		
+		model								 = owner;	
 	}
 	
 	
@@ -66,34 +63,19 @@ namespace Rendering3D
 	{
 
         // Ilumination
-        illuminate(view);
-
-        // Camera transformation (camera inverse and projection)
-        apply_camera_transformations(view.get_camera());
-
-        // NDC transformation
-        NDC_transformation();
+        //illuminate(view);        
         
         // World Coordinates to Screen Coordinates
-        display_coordinates_transformation(view.get_width(), view.get_height());
-      
-        auto& display_vertices = model->get_display_vertices();
-
+        display_coordinates_transformation(view.get_width(), view.get_height());    
+        
         // Clipping and Rendering
         for (int* indices = original_vertices_indices.data(), *end = indices + original_vertices_indices.size(); indices < end; indices += 3)
-        {
-            const toolkit::Point4i& v0 = display_vertices[indices[0]];
-            const toolkit::Point4i& v1 = display_vertices[indices[1]];
-            const toolkit::Point4i& v2 = display_vertices[indices[2]];
+        {           
 
-            cout << v0[0] << "," << v0[1] << " / " << v1[0] << "," << v1[1] << " / " << v2[0] << "," << v2[1] << endl;
-
-
-            //if (!is_frontface(model->get_transformed_vertices().data(), indices))
+            if (is_frontface(model->get_transformed_vertices().data(), indices))
             {
 				
-                // Clip polygons
-                /*
+                // Clip polygons                
                 std::vector<toolkit::Point4i> clipped_vertices;
                 static const int clipped_indices[] = { 0,1,2,3,4,5,6,7,8,9 };
                 
@@ -106,19 +88,19 @@ namespace Rendering3D
                     view.get_height(),
                     clipped_vertices
                 );
-				*/
+				
 
                 // Render
-                //if (vertex_count >= 3)
-                //{
+                if (vertex_count >= 3)
+                {
                     view.get_rasterizer().set_color(material.get_color());
                     
                     // With clipping
-                    //view.get_rasterizer().fill_convex_polygon_z_buffer(clipped_vertices.data(), clipped_indices, clipped_indices + vertex_count);
+                    view.get_rasterizer().fill_convex_polygon_z_buffer(clipped_vertices.data(), clipped_indices, clipped_indices + vertex_count);
 					
                     // Whitout clipping:
-                     view.get_rasterizer().fill_convex_polygon_z_buffer(model->get_display_vertices().data(), indices, indices + 3);
-                //}
+                    // view.get_rasterizer().fill_convex_polygon_z_buffer(model->get_display_vertices().data(), indices, indices + 3);
+                }
             }
         }
 	}
@@ -134,23 +116,59 @@ namespace Rendering3D
 
     void Mesh::illuminate(View& view)
     {
-    }
+        auto normals = model->get_original_normals();
+        auto & transformed_normals = model->get_transformed_normals();
 
-    void Mesh::apply_camera_transformations(Camera& camera)
-    {
-    }
+        toolkit::Vector4f light({ 0.5, -0.2, -0.8, 1 });
 
+        for (int i = 0; i < original_normals_indices.size(); ++i)
+        {
+            transformed_normals[original_normals_indices[i]] = toolkit::Matrix44f(model->get_transformation()) * toolkit::Matrix41f(normals[original_normals_indices[i]]);
+            
+            float normal_divisor = 1.f / transformed_normals[original_normals_indices[i]][3];
+
+            transformed_normals[original_normals_indices[i]][0] *= normal_divisor;
+            transformed_normals[original_normals_indices[i]][1] *= normal_divisor;
+            transformed_normals[original_normals_indices[i]][2] *= normal_divisor;
+            transformed_normals[original_normals_indices[i]][3] = 1.f;  
+            
+            /*
+            float intensity = light.dot_product(transformed_normals[original_normals_indices[i]]);
+
+            if (intensity < 0.f)
+            {
+                intensity = 0.f;
+            }
+            else if (intensity > 1.f)
+            {
+                intensity = 1.f;
+            }
+
+            material.get_transformed_colors()[original_normals_indices[i]] = { 
+                                                                                material.get_color().data.component.r * intensity,
+                                                                                material.get_color().data.component.g * intensity,
+                                                                                material.get_color().data.component.b * intensity,
+                                                                                material.get_color().data.component.a,
+                                                                             };
+            */
+        }
+
+       
+    }   
 
     void Mesh::NDC_transformation()
-    {
-        /*for (int i = 0; i < original_vertices_indices.size(); ++i)
-        {
-            float inv_w = 1.f / model->getv[3];
-            v[0] *= inv_w;
-            v[1] *= inv_w;
-            v[2] *= inv_w;
+    {   
+        auto & transformed_vertices = model->get_transformed_vertices();
 
-        }*/
+        for (int i = 0; i < original_vertices_indices.size(); ++i)
+        {
+            toolkit::Point4f& vertex = transformed_vertices[original_vertices_indices[i]];
+            
+            float inv_w = 1.f / vertex[3];
+            vertex[0] *= inv_w;
+            vertex[1] *= inv_w;
+            vertex[2] *= inv_w;        
+        }
     }
 
 

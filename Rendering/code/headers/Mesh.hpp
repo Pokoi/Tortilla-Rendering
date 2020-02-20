@@ -64,10 +64,8 @@ namespace Rendering3D
 
         bool is_frontface(const toolkit::Point4f* const projected_vertices, const int* const indices);
         
-        void illuminate(class View& view);
+        void illuminate(class View& view);        
         
-        void apply_camera_transformations(class Camera& camera);
-
         void NDC_transformation();
 
         void display_coordinates_transformation(size_t width, size_t height);

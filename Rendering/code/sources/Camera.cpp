@@ -32,7 +32,7 @@
 
 namespace Rendering3D
 {
-    Camera::Camera(View* view) : projection{ 5, 15, 20, (float)800 / (float)600 }
+    Camera::Camera(View* view) : projection{ 1, 50, 20, view->get_width() / view->get_height()}
     {        
         projection.set(5, 15, 20, float(view->get_width()) / float(view -> get_height()));
     }

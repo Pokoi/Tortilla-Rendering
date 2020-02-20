@@ -56,7 +56,7 @@ namespace Rendering3D
         {
             transformation = translation  * rotation_x * rotation_y * rotation_z * scaling;
             return transformation;
-        }
+        }        
 
     };
 }

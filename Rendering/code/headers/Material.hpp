@@ -29,6 +29,7 @@
 
 #pragma once
 #include <Color_Buffer_Rgba8888.hpp>
+#include <Point.hpp>
 
 namespace Rendering3D
 {
@@ -36,15 +37,27 @@ namespace Rendering3D
 	class Material
 	{
 		// Color
-		Color_Buffer_Rgba8888::Color color{ 100,100,100,255};
+		Color_Buffer_Rgba8888::Color original_color{ 100,100,100,255};
+        std::vector<Color_Buffer_Rgba8888::Color>	transformed_colors;
 		// Texture
 
 		// ka, kd, ks
 
     public:
+
+        Material(size_t colors_size)
+        {
+            transformed_colors.resize(colors_size);
+        }
+
         Color_Buffer_Rgba8888::Color get_color()
         {
-            return color;
+            return original_color;
+        }
+
+        std::vector<Color_Buffer_Rgba8888::Color>& get_transformed_colors()
+        {
+            return transformed_colors;
         }
 
 	};

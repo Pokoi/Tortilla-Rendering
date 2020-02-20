@@ -101,6 +101,18 @@
                 return (*this);
             }
 
+            float dot_product(const Vector& other)
+            {
+                float product = 0.0f;
+
+                for (size_t index = 0; index < DIMENSION; index++)
+                {
+                   product += this->coordinates().get_values()[index] * other.coordinates().get_values()[index]
+                }
+
+                return product;
+            }
+
         };
 
         template< typename NUMERIC_TYPE >
