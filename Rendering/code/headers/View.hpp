@@ -49,10 +49,12 @@
             size_t height;
 
             Color_Buffer               Color_buffer;
-            Rasterizer< Color_Buffer > rasterizer; 
+            Rasterizer< Color_Buffer > rasterizer;
 
             Camera	camera;
-			Light	light;
+            Light	light;
+
+            Color_Buffer_Rgba8888::Color ambient_color{  117, 28, 83, 255  };
 
 			float ambient_intensity = 0.f;
 
@@ -95,6 +97,11 @@
 			{
 				return ambient_intensity;
 			}
+
+            Color_Buffer_Rgba8888::Color get_ambient_color()
+            {
+                return ambient_color;
+            }
 
             void clear();
             void swap();

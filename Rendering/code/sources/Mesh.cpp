@@ -48,16 +48,12 @@ namespace Rendering3D
 {
 	
 	Mesh::Mesh(
-				std::vector<int>	vertices_indices,
-				std::vector<int>	normals_indices,
-				std::vector<int>	textures_coord_indices,
+				std::vector<int> given_indices,				
 				Model * owner
-			): material{vertices_indices.size()}
+			): material{given_indices.size()}
 	{
-		original_vertices_indices			 = vertices_indices;
-		original_normals_indices			 = normals_indices;
-		original_texture_coordinates_indices = textures_coord_indices;
-		model								 = owner;	
+        indices = given_indices;
+		model   = owner;	
 	}
 	
 	
@@ -71,23 +67,22 @@ namespace Rendering3D
         display_coordinates_transformation(view.get_width(), view.get_height());    
         
         // Clipping and Rendering
-        for (int* indices = original_vertices_indices.data(), *end = indices + original_vertices_indices.size(); indices < end; indices += 3)
+        for (int* index = indices.data(), *end = index + indices.size(); index < end; index += 3)
         {           
 
-            if (is_frontface(model->get_transformed_vertices().data(), indices))
-            {
-				
+            if (is_frontface(model->get_transformed_vertices().data(), index))
+            {				
                 // Clip polygons                
                 std::vector<toolkit::Point4i> clipped_vertices;
                 static const int clipped_indices[] = { 0,1,2,3,4,5,6,7,8,9 };
 				
-				material.calculate_average_color(indices, indices + 3);
+				material.calculate_average_color(index, index + 3);
                 
                 int vertex_count = Clipping::get().polygon_clipper
                 (
                     model->get_display_vertices().data(),
-                    indices,
-                    indices + 3,
+                    index,
+                    index + 3,
                     view.get_width(),
                     view.get_height(),
                     clipped_vertices
@@ -100,9 +95,6 @@ namespace Rendering3D
                     
                     // With clipping
                     view.get_rasterizer().fill_convex_polygon_z_buffer(clipped_vertices.data(), clipped_indices, clipped_indices + vertex_count);
-					
-                    // Whitout clipping:
-                    // view.get_rasterizer().fill_convex_polygon_z_buffer(model->get_display_vertices().data(), indices, indices + 3);
                 }
             }
         }
@@ -122,20 +114,20 @@ namespace Rendering3D
         auto normals = model->get_original_normals();
         auto & transformed_normals = model->get_transformed_normals();        
 
-        for (int i = 0; i < original_normals_indices.size(); ++i)
+        for (int i = 0; i < indices.size(); ++i)
         {
 			Color_Buffer_Rgba8888::Color	diffuse			= material.get_color();
 			float							ambient			= view.get_ambient_intensity();
 			Color_Buffer_Rgba8888::Color	light_color		= view.get_light().get_light_color();
 			toolkit::Vector4f				direction		= view.get_light().get_direction();
 			
-			float multiplier = model->get_transformed_normals()[original_normals_indices[i]].dot_product(direction);			
+			float multiplier = model->get_transformed_normals()[indices[i]].dot_product(direction);
 			if (multiplier > 1) multiplier = 1;
 			else if (multiplier < 0) multiplier = 0;
 
-			int transformed_blue	= (diffuse.data.component.g * ambient) + (diffuse.data.component.g * light_color.data.component.g * multiplier);
-			int transformed_green	= (diffuse.data.component.b * ambient) + (diffuse.data.component.b * light_color.data.component.b * multiplier);
-			int transformed_red		= (diffuse.data.component.r * ambient) + (diffuse.data.component.r * light_color.data.component.r * multiplier);
+			/*int transformed_blue	= ((diffuse.data.component.b * material.get_kd()) * (ambient * material.get_ka())) + ((diffuse.data.component.b * material.get_kd()) * (light_color.data.component.b * material.get_kl()) * multiplier);
+			int transformed_green	= ((diffuse.data.component.g * material.get_kd()) * (ambient * material.get_ka())) + ((diffuse.data.component.g * material.get_kd()) * (light_color.data.component.g * material.get_kl()) * multiplier);
+			int transformed_red		= ((diffuse.data.component.r * material.get_kd()) * (ambient * material.get_ka())) + ((diffuse.data.component.r * material.get_kd()) * (light_color.data.component.r * material.get_kl()) * multiplier);
 
 			if (transformed_blue > 255) transformed_blue = 255;
 			else if (transformed_blue < 0) transformed_blue = 0;
@@ -144,11 +136,15 @@ namespace Rendering3D
 			else if (transformed_green < 0) transformed_green = 0;
 
 			if (transformed_red > 255) transformed_red = 255;
-			else if (transformed_red < 0) transformed_red = 0;
+			else if (transformed_red < 0) transformed_red = 0;*/
 
-			material.get_transformed_colors()[original_normals_indices[i]].set(transformed_red, transformed_blue, transformed_green);            
+			//material.get_transformed_colors()[indices[i]].set(transformed_red, transformed_blue, transformed_green);
+            material.get_transformed_colors()[indices[i]].set(  
+                                                                diffuse.data.component.r * material.get_kd() + ((diffuse.data.component.r * light_color.data.component.r ) >> 8) * multiplier * material.get_kl(), 
+                                                                diffuse.data.component.g * material.get_kd() + ((diffuse.data.component.g * light_color.data.component.g ) >> 8) * multiplier * material.get_kl(),
+                                                                diffuse.data.component.b * material.get_kd() + ((diffuse.data.component.b * light_color.data.component.b ) >> 8) * multiplier * material.get_kl()
+                                                            );
         }
-
        
     }   
 
@@ -156,9 +152,9 @@ namespace Rendering3D
     {   
         auto & transformed_vertices = model->get_transformed_vertices();
 
-        for (int i = 0; i < original_vertices_indices.size(); ++i)
+        for (int i = 0; i < indices.size(); ++i)
         {
-            toolkit::Point4f& vertex = transformed_vertices[original_vertices_indices[i]];
+            toolkit::Point4f& vertex = transformed_vertices[indices[i]];
             
             float inv_w = 1.f / vertex[3];
             vertex[0] *= inv_w;
@@ -175,9 +171,9 @@ namespace Rendering3D
 
         toolkit::Transformation3f transformation = translation * scaling;
 
-        for (int i = 0; i < original_vertices_indices.size(); ++i)
+        for (int i = 0; i < indices.size(); ++i)
         {
-            model->get_display_vertices()[original_vertices_indices[i]] = Point4i(toolkit::Matrix44f(transformation) * toolkit::Matrix41f(model->get_transformed_vertices()[original_vertices_indices[i]]));
+            model->get_display_vertices()[indices[i]] = Point4i(toolkit::Matrix44f(transformation) * toolkit::Matrix41f(model->get_transformed_vertices()[indices[i]]));
         }
     }
 }

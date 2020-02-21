@@ -72,14 +72,11 @@ namespace Rendering3D
 			{
 				size_t index_offset = 0;
 
-				std::vector<int> vertices_indices;
-				std::vector<int> normals_indices;
-                std::vector<int> textures_coord_indices;
-
 				std::vector<int> indices;
-				
+                				
 				indices.resize(shapes[s].mesh.indices.size());
-
+                
+                // Calculate the vertex and normal for each index
 				for (int index = 0; index < indices.size(); ++index)
 				{
 					int vertex_index = shapes[s].mesh.indices[index].vertex_index;
@@ -92,54 +89,14 @@ namespace Rendering3D
 					tinyobj::real_t		ny = attrib.normals[3 * normal_index + 1];
 					tinyobj::real_t		nz = attrib.normals[3 * normal_index + 2];
 					
-					original_vertices.push_back(attrib.vertices[]);
+                    original_vertices.push_back ( { {vx, vy, vz, 1} } );
+                    original_normals.push_back  ( { {nx, ny, nz, 1} } );
+                    
+                    indices[index] = index_offset + index;
 				}
 
-				
-
-
-
-				// For each face in the shape
-				for (size_t f = 0; f < shapes[s].mesh.num_face_vertices.size(); ++f)
-				{
-					int fv = shapes[s].mesh.num_face_vertices[f];					
-
-					// For each vertex
-					for (size_t v = 0; v < fv; ++v)
-					{
-						tinyobj::index_t	idx = shapes[s].mesh.indices[index_offset + v];
-						tinyobj::real_t		vx  = attrib.vertices[3 * idx.vertex_index + 0];
-						tinyobj::real_t		vy  = attrib.vertices[3 * idx.vertex_index + 1];
-						tinyobj::real_t		vz  = attrib.vertices[3 * idx.vertex_index + 2];
-						tinyobj::real_t		nx  = attrib.normals[3 * idx.normal_index + 0];
-						tinyobj::real_t		ny  = attrib.normals[3 * idx.normal_index + 1];
-						tinyobj::real_t		nz  = attrib.normals[3 * idx.normal_index + 2];
-						//tinyobj::real_t		tx  = attrib.texcoords[2 * idx.texcoord_index + 0];
-						//tinyobj::real_t		ty  = attrib.texcoords[2 * idx.texcoord_index + 1];	
-						
-                        toolkit::Point4f vertex({ vx, vy, vz, 1});
-                        toolkit::Vector4f normal({ nx, ny, nz, 1 });
-
-                        // Only save the vertex one time
-                        if (std::find(original_vertices.begin(), original_vertices.end(), vertex) == original_vertices.end())
-                        {
-						    original_vertices.push_back	(vertex);
-						    original_normals.push_back	(normal);
-                        }
-                                               
-						//original_texture_coordinates.push_back	({ { tx, ty, 1		} });
-
-						vertices_indices.push_back(idx.vertex_index);
-						normals_indices.push_back(idx.normal_index);
-						//textures_coord_indices		.push_back(idx.texcoord_index);
-					}
-
-					index_offset += fv;
-					shapes[s].mesh.material_ids[f];
-				}
-
-				meshes.push_back(std::make_shared<Mesh>(vertices_indices, normals_indices, textures_coord_indices, this));
-               
+                index_offset += indices.size();
+				meshes.push_back(std::make_shared<Mesh>(indices, this));               
 			}
 		}
 
@@ -149,7 +106,6 @@ namespace Rendering3D
 		display_vertices.resize(original_vertices.size());
 
 		/////////////////////////////////////////////////////////////////////////////////////
-
 	}
 
 	Transform Model::get_transform()
@@ -167,14 +123,14 @@ namespace Rendering3D
 		static float angle = 0.f;
 
 		// To rotate the model in runtime
-		angle += 0.025f;
+		angle += 0.0050f;
 
 		// Modify transformations matrices
-		transform->scaling.set(1.f);
+		transform->scaling.set(0.5f);
         transform->rotation_y.set<toolkit::Rotation3f::AROUND_THE_Y_AXIS>(angle);
-        transform->rotation_x.set<toolkit::Rotation3f::AROUND_THE_X_AXIS>(angle);
-        transform->rotation_z.set<toolkit::Rotation3f::AROUND_THE_Z_AXIS>(angle);
-		transform->translation.set(0, 0, -5);
+        //transform->rotation_x.set<toolkit::Rotation3f::AROUND_THE_X_AXIS>(angle);
+        //transform->rotation_z.set<toolkit::Rotation3f::AROUND_THE_Z_AXIS>(angle);
+		transform->translation.set(0, 0, -3);
 		
 		// Unify transformation matrix with parent transformation
         transformation = view.get_camera().get_projection() * get_transform().get_transformation();

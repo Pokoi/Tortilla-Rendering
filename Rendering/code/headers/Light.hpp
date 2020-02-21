@@ -44,7 +44,7 @@ namespace Rendering3D
 		
 	public:
 
-		Light() : light_color{ {255,0,0,255} } {}
+		Light() : light_color{ {255, 255, 255,255} } {}
 
 		toolkit::Vector4f get_direction()
 		{
@@ -52,7 +52,7 @@ namespace Rendering3D
 						{
 							0.5f,
 							0.5f,
-							0.5f
+							0.f
 						}
 					};
 		}

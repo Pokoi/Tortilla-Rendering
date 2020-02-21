@@ -71,7 +71,7 @@
 
             void clear ()
             {
-                color_buffer.set_color(150, 150, 150);
+                color_buffer.set_color(0, 0, 0);
 
                 for (int offset = 0; offset < color_buffer.size(); ++offset)
                 {

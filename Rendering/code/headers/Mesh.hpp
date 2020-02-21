@@ -40,9 +40,7 @@ namespace Rendering3D
 
 	class Mesh
 	{
-		std::vector<int> original_vertices_indices;
-		std::vector<int> original_normals_indices;
-		std::vector<int> original_texture_coordinates_indices;
+		std::vector<int> indices;		
 		
 		Material		material;
 		class Model*	model;
@@ -51,9 +49,7 @@ namespace Rendering3D
 	public:
 
 		Mesh (
-				std::vector<int>	vertices_indices,
-				std::vector<int>	normals_indices,
-				std::vector<int>	textures_coord_indices,
+				std::vector<int>	indices,				
 				class Model    *	owner
 			);
 

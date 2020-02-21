@@ -37,19 +37,25 @@ namespace Rendering3D
 	class Material
 	{
 		// Color
-		Color_Buffer_Rgba8888::Color original_color{ 100,100,100,255};
+		Color_Buffer_Rgba8888::Color original_color{ 255,255,255,255};
         std::vector<Color_Buffer_Rgba8888::Color>	transformed_colors;
 
 		Color_Buffer_Rgba8888::Color average_color{100,100,100,255};
 		// Texture
 
 		// ka, kd, ks
+        float ka;
+        float kd;
+        float kl;
 
     public:
 
         Material(size_t colors_size)
         {
             transformed_colors.resize(colors_size);
+            ka = 0.2f;
+            kd = 0.2f;
+            kl = 0.8f;
         }
 
         Color_Buffer_Rgba8888::Color & get_color()
@@ -81,5 +87,20 @@ namespace Rendering3D
 
 			average_color.set(total_r / count, total_g / count, total_b / count);
 		}
+
+        float get_ka()
+        {
+            return ka;
+        }
+
+        float get_kd()
+        {
+            return kd;
+        }
+
+        float get_kl()
+        {
+            return kl;
+        }
 	};
 }
