@@ -54,11 +54,11 @@ namespace Rendering3D
         {
             if (type == LimitTypes::horizontal)
             {
-                return origin.coordinates().get_values()[1] < point.coordinates().get_values()[1];
+                return origin.coordinates().get_values()[1] <= point.coordinates().get_values()[1];
             }
             else if (type == LimitTypes::vertical)
             {
-                return origin.coordinates().get_values()[0] < point.coordinates().get_values()[0];
+                return origin.coordinates().get_values()[0] <= point.coordinates().get_values()[0];
             }
             else if (type == LimitTypes::diagonal)
             {

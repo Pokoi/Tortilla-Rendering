@@ -17,7 +17,7 @@
 using namespace sf;
 using namespace Rendering3D;
 
-static const size_t window_width  = 800;
+static const size_t window_width  = 1000;
 static const size_t window_height = 600;
 
 int main ()
@@ -28,7 +28,7 @@ int main ()
     View   view  (window_width, window_height);
 
 
-	Model model("sphere.obj");
+	Model model("deer.obj");
 
     // Initialization:
 

@@ -42,7 +42,7 @@ namespace Rendering3D
 
     public:
 
-        Camera() : projection{ 1, 50, 20, (float)800 / (float)600 } {}
+        Camera() : projection{ 1, 50, 20, (float)1000 / (float)600 } {}
 
         Camera(class View * view);
 

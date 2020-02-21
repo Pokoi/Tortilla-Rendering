@@ -126,46 +126,44 @@ namespace Rendering3D
 		angle += 0.0050f;
 
 		// Modify transformations matrices
-		transform->scaling.set(0.5f);
+		transform->scaling.set(0.0002f);
         transform->rotation_y.set<toolkit::Rotation3f::AROUND_THE_Y_AXIS>(angle);
-        //transform->rotation_x.set<toolkit::Rotation3f::AROUND_THE_X_AXIS>(angle);
-        //transform->rotation_z.set<toolkit::Rotation3f::AROUND_THE_Z_AXIS>(angle);
-		transform->translation.set(0, 0, -3);
+        //transform->rotation_x.set<toolkit::Rotation3f::AROUND_THE_X_AXIS>(80);
+        //transform->rotation_z.set<toolkit::Rotation3f::AROUND_THE_Z_AXIS>(-angle);
+		transform->translation.set(0, -0.3f, -2);
 		
 		// Unify transformation matrix with parent transformation
         transformation = view.get_camera().get_projection() * get_transform().get_transformation();
 
 		// Transformation per vertex
         
-		for (size_t index = 0; index < original_vertices.size(); ++index)
-		{
-			toolkit::Point4f& vertex = transformed_vertices[index]  = toolkit::Matrix44f(transformation) * toolkit::Matrix41f(original_vertices[index]);
-            toolkit::Vector4f& normal = transformed_normals[index]   = toolkit::Matrix44f(transformation) * toolkit::Matrix41f(original_normals[index]);
-			
-            // Normalize last value for perspective transformation
-			float vertex_divisor = 1.f / vertex[3];
+        for (size_t index = 0; index < original_vertices.size(); ++index)
+        {
+            toolkit::Point4f& vertex = transformed_vertices[index] = toolkit::Matrix44f(transformation) * toolkit::Matrix41f(original_vertices[index]);
+            toolkit::Vector4f& normal = transformed_normals[index] = toolkit::Matrix44f(transformation) * toolkit::Matrix41f(original_normals[index]);
 
-			vertex[0] *= vertex_divisor;
-			vertex[1] *= vertex_divisor;
-			vertex[2] *= vertex_divisor;
-			vertex[3]  = 1.f;            
-            
+            // Normalize last value for perspective transformation
+            float vertex_divisor = 1.f / vertex[3];
+
+            vertex[0] *= vertex_divisor;
+            vertex[1] *= vertex_divisor;
+            vertex[2] *= vertex_divisor;
+            vertex[3] = 1.f;
+
             float normal_divisor = 1.f / normal[3];
 
             normal[0] *= normal_divisor;
             normal[1] *= normal_divisor;
             normal[2] *= normal_divisor;
-            normal[3] = 1.f;    
-			
-			float v = std::sqrt(std::pow(normal[0],2) + std::pow(normal[1],2) + std::pow(normal[2], 2));
-			v = 1 / v;
-			normal[0] *= v;
-			normal[1] *= v;
-			normal[2] *= v;
-		}
+            normal[3] = 1.f;
 
-
-	        
+            float v = std::sqrt(std::pow(normal[0], 2) + std::pow(normal[1], 2) + std::pow(normal[2], 2));
+            v = 1 / v;
+            normal[0] *= v;
+            normal[1] *= v;
+            normal[2] *= v;
+            normal[3] = 0.f;
+        }   
 	}
     
     void Model::Render(View& view)

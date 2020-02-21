@@ -118,32 +118,28 @@ namespace Rendering3D
         {
 			Color_Buffer_Rgba8888::Color	diffuse			= material.get_color();
 			float							ambient			= view.get_ambient_intensity();
-			Color_Buffer_Rgba8888::Color	light_color		= view.get_light().get_light_color();
-			toolkit::Vector4f				direction		= view.get_light().get_direction();
+			Color_Buffer_Rgba8888::Color	light_color		= view.get_light().get_light_color(model->get_transformed_vertices()[indices[i]]);
+			toolkit::Vector4f				direction		= view.get_light().get_direction(model->get_transformed_vertices()[indices[i]]);
 			
 			float multiplier = model->get_transformed_normals()[indices[i]].dot_product(direction);
-			if (multiplier > 1) multiplier = 1;
+			
+            if (multiplier > 1) multiplier = 1;
 			else if (multiplier < 0) multiplier = 0;
+             
+            diffuse * material.get_kd();
+            light_color * material.get_kl();
 
-			/*int transformed_blue	= ((diffuse.data.component.b * material.get_kd()) * (ambient * material.get_ka())) + ((diffuse.data.component.b * material.get_kd()) * (light_color.data.component.b * material.get_kl()) * multiplier);
-			int transformed_green	= ((diffuse.data.component.g * material.get_kd()) * (ambient * material.get_ka())) + ((diffuse.data.component.g * material.get_kd()) * (light_color.data.component.g * material.get_kl()) * multiplier);
-			int transformed_red		= ((diffuse.data.component.r * material.get_kd()) * (ambient * material.get_ka())) + ((diffuse.data.component.r * material.get_kd()) * (light_color.data.component.r * material.get_kl()) * multiplier);
-
-			if (transformed_blue > 255) transformed_blue = 255;
-			else if (transformed_blue < 0) transformed_blue = 0;
-
-			if (transformed_green > 255) transformed_green = 255;
-			else if (transformed_green < 0) transformed_green = 0;
-
-			if (transformed_red > 255) transformed_red = 255;
-			else if (transformed_red < 0) transformed_red = 0;*/
-
-			//material.get_transformed_colors()[indices[i]].set(transformed_red, transformed_blue, transformed_green);
+            ///*
             material.get_transformed_colors()[indices[i]].set(  
-                                                                diffuse.data.component.r * material.get_kd() + ((diffuse.data.component.r * light_color.data.component.r ) >> 8) * multiplier * material.get_kl(), 
-                                                                diffuse.data.component.g * material.get_kd() + ((diffuse.data.component.g * light_color.data.component.g ) >> 8) * multiplier * material.get_kl(),
-                                                                diffuse.data.component.b * material.get_kd() + ((diffuse.data.component.b * light_color.data.component.b ) >> 8) * multiplier * material.get_kl()
-                                                            );
+                                                            ((diffuse.data.component.r * light_color.data.component.r ) >> 8) * multiplier, 
+                                                            ((diffuse.data.component.g * light_color.data.component.g ) >> 8) * multiplier,
+                                                            ((diffuse.data.component.b * light_color.data.component.b ) >> 8) * multiplier
+                                                        );
+            // */
+
+
+           // material.get_transformed_colors()[indices[i]] = diffuse;
+       
         }
        
     }   

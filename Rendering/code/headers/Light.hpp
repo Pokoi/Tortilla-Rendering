@@ -41,26 +41,56 @@ namespace Rendering3D
 	{
 		Transform transform;		
 		Color_Buffer_Rgba8888::Color light_color;	
+
+        float intensity = 10.f;
+
 		
 	public:
 
 		Light() : light_color{ {255, 255, 255,255} } {}
 
-		toolkit::Vector4f get_direction()
+		toolkit::Vector4f get_direction(toolkit::Point4f point)
 		{
-			return	{ 
-						{
-							0.5f,
-							0.5f,
-							0.f
-						}
-					};
+            
+            toolkit::Vector4f direction {
+                                            {
+                                              /*toolkit::Matrix44f(transform.transformation)[3][0]*/ -0.75f - point.coordinates().get_values()[0],
+                                              /*toolkit::Matrix44f(transform.transformation)[3][1]*/ 0.f - point.coordinates().get_values()[1],
+                                              /*toolkit::Matrix44f(transform.transformation)[3][2]*/ 0.f - point.coordinates().get_values()[2],
+                                              0
+                                            }
+                                       };
+
+             
+
+            float v = std::sqrt(std::pow(direction[0], 2) + std::pow(direction[1], 2) + std::pow(direction[2], 2));
+            v = 1 / v;
+            direction[0] *= v ;
+            direction[1] *= v ;
+            direction[2] *= v ;
+            direction[3] = 0.f;
+
+            return	direction;
 		}
 
 
-		Color_Buffer_Rgba8888::Color get_light_color()
-		{			
-			return light_color;
+		Color_Buffer_Rgba8888::Color get_light_color(toolkit::Point4f point)
+		{	
+            /*
+            float distance = std::sqrt  (
+                                            std::pow ( point.coordinates().get_values()[0] - toolkit::Matrix44f(transform.transformation)[3][0], 2) +
+                                            std::pow ( point.coordinates().get_values()[1] - toolkit::Matrix44f(transform.transformation)[3][1], 2) +
+                                            std::pow ( point.coordinates().get_values()[2] - toolkit::Matrix44f(transform.transformation)[3][2], 2)
+                                        
+                                        );
+
+            Color_Buffer_Rgba8888::Color color = light_color;
+
+            color * (intensity * distance) ;
+           */
+            return light_color;
+
+            
 		}
 
 

@@ -37,7 +37,7 @@ namespace Rendering3D
 	class Material
 	{
 		// Color
-		Color_Buffer_Rgba8888::Color original_color{ 255,255,255,255};
+		Color_Buffer_Rgba8888::Color original_color{ 255,100,0,255};
         std::vector<Color_Buffer_Rgba8888::Color>	transformed_colors;
 
 		Color_Buffer_Rgba8888::Color average_color{100,100,100,255};
@@ -53,7 +53,7 @@ namespace Rendering3D
         Material(size_t colors_size)
         {
             transformed_colors.resize(colors_size);
-            ka = 0.2f;
+            ka = 0.0f;
             kd = 0.2f;
             kl = 0.8f;
         }
