@@ -123,14 +123,14 @@ namespace Rendering3D
 		static float angle = 0.f;
 
 		// To rotate the model in runtime
-		angle += 0.0050f;
+		angle += 0.050f;
 
 		// Modify transformations matrices
 		transform->scaling.set(0.0002f);
         transform->rotation_y.set<toolkit::Rotation3f::AROUND_THE_Y_AXIS>(angle);
         //transform->rotation_x.set<toolkit::Rotation3f::AROUND_THE_X_AXIS>(80);
         //transform->rotation_z.set<toolkit::Rotation3f::AROUND_THE_Z_AXIS>(-angle);
-		transform->translation.set(0, -0.3f, -2);
+		transform->translation.set(0, 0.f, -2);
 		
 		// Unify transformation matrix with parent transformation
         transformation = view.get_camera().get_projection() * get_transform().get_transformation();

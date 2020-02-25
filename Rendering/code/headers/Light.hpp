@@ -39,41 +39,16 @@ namespace Rendering3D
 
 	class Light
 	{
-		Transform transform;		
+    protected:
+        Transform transform;		
 		Color_Buffer_Rgba8888::Color light_color;	
-
-        float intensity = 10.f;
-
-		
+	
 	public:
 
-		Light() : light_color{ {255, 255, 255,255} } {}
+		Light(Color_Buffer_Rgba8888::Color color) : light_color{ color } {}
 
-		toolkit::Vector4f get_direction(toolkit::Point4f point)
-		{
-            
-            toolkit::Vector4f direction {
-                                            {
-                                              /*toolkit::Matrix44f(transform.transformation)[3][0]*/ -0.75f - point.coordinates().get_values()[0],
-                                              /*toolkit::Matrix44f(transform.transformation)[3][1]*/ 0.f - point.coordinates().get_values()[1],
-                                              /*toolkit::Matrix44f(transform.transformation)[3][2]*/ 0.f - point.coordinates().get_values()[2],
-                                              0
-                                            }
-                                       };
-
-             
-
-            float v = std::sqrt(std::pow(direction[0], 2) + std::pow(direction[1], 2) + std::pow(direction[2], 2));
-            v = 1 / v;
-            direction[0] *= v ;
-            direction[1] *= v ;
-            direction[2] *= v ;
-            direction[3] = 0.f;
-
-            return	direction;
-		}
-
-
+        virtual toolkit::Vector4f get_direction(toolkit::Point4f point) = 0;
+		
 		Color_Buffer_Rgba8888::Color get_light_color(toolkit::Point4f point)
 		{	
             /*
@@ -88,11 +63,69 @@ namespace Rendering3D
 
             color * (intensity * distance) ;
            */
-            return light_color;
-
-            
+            return light_color;            
 		}
 
+        void set_position(toolkit::Vector3f & position)
+        {
+            transform.translation.set(position);
+        }
 
 	};
+
+    class PointLight : public Light
+    {
+    public:       
+
+        PointLight(Color_Buffer_Rgba8888::Color color, toolkit::Vector3f position) : Light{ color }
+        {
+            set_position(position);
+        }
+
+        virtual toolkit::Vector4f get_direction(toolkit::Point4f point)
+        {
+
+            toolkit::Vector4f direction{
+                                            {
+                                                toolkit::Matrix44f(transform.transformation)[3][0] - point.coordinates().get_values()[0],
+                                                toolkit::Matrix44f(transform.transformation)[3][1] - point.coordinates().get_values()[1],
+                                                toolkit::Matrix44f(transform.transformation)[3][2] - point.coordinates().get_values()[2],
+                                                0
+                                            }
+            };
+
+            float v = std::sqrt(std::pow(direction[0], 2) + std::pow(direction[1], 2) + std::pow(direction[2], 2));
+            v = 1 / v;
+            direction[0] *= v;
+            direction[1] *= v;
+            direction[2] *= v;
+            direction[3] = 0.f;
+
+            return	direction;
+        }
+
+    };
+
+    class DirectionalLight : public Light
+    {
+
+    public:
+
+        toolkit::Vector4f direction;
+
+        DirectionalLight(Color_Buffer_Rgba8888::Color color, toolkit::Vector4f direction) : Light{ color }, direction{ direction } {}
+
+        virtual toolkit::Vector4f get_direction(toolkit::Point4f point) override
+        {
+            float v = std::sqrt(std::pow(direction[0], 2) + std::pow(direction[1], 2) + std::pow(direction[2], 2));
+            v = 1 / v;
+            direction[0] *= v;
+            direction[1] *= v;
+            direction[2] *= v;
+            direction[3] = 0.f;
+
+            return	direction;
+        }
+
+    };
 }

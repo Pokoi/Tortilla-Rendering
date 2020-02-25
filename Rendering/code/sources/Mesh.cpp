@@ -111,34 +111,38 @@ namespace Rendering3D
 
     void Mesh::illuminate(View& view)
     {
-        auto normals = model->get_original_normals();
-        auto & transformed_normals = model->get_transformed_normals();        
+        auto normals                = model->get_original_normals();
+        auto & transformed_normals  = model->get_transformed_normals();        
 
         for (int i = 0; i < indices.size(); ++i)
         {
 			Color_Buffer_Rgba8888::Color	diffuse			= material.get_color();
-			float							ambient			= view.get_ambient_intensity();
-			Color_Buffer_Rgba8888::Color	light_color		= view.get_light().get_light_color(model->get_transformed_vertices()[indices[i]]);
-			toolkit::Vector4f				direction		= view.get_light().get_direction(model->get_transformed_vertices()[indices[i]]);
 			
-			float multiplier = model->get_transformed_normals()[indices[i]].dot_product(direction);
+            for (Light& light : view.get_lights())
+            {
+
+			    Color_Buffer_Rgba8888::Color	light_color		= light.get_light_color(model->get_transformed_vertices()[indices[i]]);
+			    toolkit::Vector4f				direction		= light.get_direction(model->get_transformed_vertices()[indices[i]]);
 			
-            if (multiplier > 1) multiplier = 1;
-			else if (multiplier < 0) multiplier = 0;
+			    float multiplier = model->get_transformed_normals()[indices[i]].dot_product(direction);
+			
+                if (multiplier > 1) multiplier = 1;
+			    else if (multiplier < 0) multiplier = 0;
              
-            diffuse * material.get_kd();
-            light_color * material.get_kl();
+                diffuse * material.get_kd();
+                light_color * material.get_kl();
 
-            ///*
-            material.get_transformed_colors()[indices[i]].set(  
-                                                            ((diffuse.data.component.r * light_color.data.component.r ) >> 8) * multiplier, 
-                                                            ((diffuse.data.component.g * light_color.data.component.g ) >> 8) * multiplier,
-                                                            ((diffuse.data.component.b * light_color.data.component.b ) >> 8) * multiplier
-                                                        );
-            // */
+                ///*
+                material.get_transformed_colors()[indices[i]].set(  
+                                                                ((diffuse.data.component.r * light_color.data.component.r ) >> 8) * multiplier, 
+                                                                ((diffuse.data.component.g * light_color.data.component.g ) >> 8) * multiplier,
+                                                                ((diffuse.data.component.b * light_color.data.component.b ) >> 8) * multiplier
+                                                            );
+                // */
 
 
-           // material.get_transformed_colors()[indices[i]] = diffuse;
+               // material.get_transformed_colors()[indices[i]] = diffuse;
+            }
        
         }
        

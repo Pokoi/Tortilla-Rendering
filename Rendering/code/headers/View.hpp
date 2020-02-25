@@ -52,11 +52,10 @@
             Rasterizer< Color_Buffer > rasterizer;
 
             Camera	camera;
-            Light	light;
+            
+            std::vector<Light> lights;
 
-            Color_Buffer_Rgba8888::Color ambient_color{  117, 28, 83, 255  };
-
-			float ambient_intensity = 0.f;
+            Color_Buffer_Rgba8888::Color ambient_color{  117, 28, 83, 255  };			
 
             std::map<std::string, std::shared_ptr<Model>> models;
             
@@ -88,15 +87,10 @@
                 return camera;
             }
 
-			Light& get_light()
+			std::vector<Light> & get_lights()
 			{
-				return light;
-			}
-
-			float get_ambient_intensity()
-			{
-				return ambient_intensity;
-			}
+				return lights;
+			}			
 
             Color_Buffer_Rgba8888::Color get_ambient_color()
             {
