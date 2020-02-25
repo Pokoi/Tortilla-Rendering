@@ -53,9 +53,9 @@ namespace Rendering3D
         Material(size_t colors_size)
         {
             transformed_colors.resize(colors_size);
-            ka = 0.0f;
-            kd = 0.2f;
-            kl = 0.8f;
+            ka = 0.05f;
+            kd = 0.05f;
+            kl = 0.9f;
         }
 
         Color_Buffer_Rgba8888::Color & get_color()

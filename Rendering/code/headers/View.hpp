@@ -61,7 +61,7 @@
 			// Models
             std::vector<std::shared_ptr<Model>> models;
             
-            Color_Buffer_Rgba8888::Color ambient_color{  117, 28, 83, 255  };			
+            Color_Buffer_Rgba8888::Color ambient_color{ 247, 223, 186, 255  };			
 
         public:
 

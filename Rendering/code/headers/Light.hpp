@@ -40,8 +40,9 @@ namespace Rendering3D
 	class Light
 	{
     protected:
-        Transform transform;		
-		Color_Buffer_Rgba8888::Color light_color;	
+        Transform transform;	
+
+		Color_Buffer_Rgba8888::Color light_color;        
 	
 	public:
 
@@ -58,11 +59,20 @@ namespace Rendering3D
                                             std::pow ( point.coordinates().get_values()[2] - toolkit::Matrix44f(transform.transformation)[3][2], 2)
                                         
                                         );
+            if (distance < 0)
+            {
+                distance = 0;
+            }
+            else if (distance > 5)
+            {
+                distance = 5;
+            }
 
             Color_Buffer_Rgba8888::Color color = light_color;
 
-            color * (intensity * distance) ;
-           */
+            color * distance ;
+           //*/
+            
             return light_color;            
 		}
 
@@ -103,7 +113,6 @@ namespace Rendering3D
 
             return	direction;
         }
-
     };
 
     class DirectionalLight : public Light
