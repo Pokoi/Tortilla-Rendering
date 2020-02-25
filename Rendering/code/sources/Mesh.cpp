@@ -118,32 +118,64 @@ namespace Rendering3D
         {
 			Color_Buffer_Rgba8888::Color	diffuse			= material.get_color();
 			
-            for (Light& light : view.get_lights())
+			float r_component = 0;
+			float g_component = 0;
+			float b_component = 0;
+
+			// Directional lights illumination
+            for (std::shared_ptr<DirectionalLight> & light : view.get_directional_lights())
             {
 
-			    Color_Buffer_Rgba8888::Color	light_color		= light.get_light_color(model->get_transformed_vertices()[indices[i]]);
-			    toolkit::Vector4f				direction		= light.get_direction(model->get_transformed_vertices()[indices[i]]);
+			    Color_Buffer_Rgba8888::Color	light_color		= light->get_light_color(model->get_transformed_vertices()[indices[i]]);
+			    toolkit::Vector4f				direction		= light->get_direction(model->get_transformed_vertices()[indices[i]]);
 			
 			    float multiplier = model->get_transformed_normals()[indices[i]].dot_product(direction);
 			
-                if (multiplier > 1) multiplier = 1;
-			    else if (multiplier < 0) multiplier = 0;
+				if (multiplier > 1)
+				{
+					multiplier = 1;
+				}
+				else if (multiplier < 0)
+				{
+					multiplier = 0;
+				}
              
-                diffuse * material.get_kd();
+                diffuse		* material.get_kd();
                 light_color * material.get_kl();
 
-                ///*
-                material.get_transformed_colors()[indices[i]].set(  
-                                                                ((diffuse.data.component.r * light_color.data.component.r ) >> 8) * multiplier, 
-                                                                ((diffuse.data.component.g * light_color.data.component.g ) >> 8) * multiplier,
-                                                                ((diffuse.data.component.b * light_color.data.component.b ) >> 8) * multiplier
-                                                            );
-                // */
-
-
-               // material.get_transformed_colors()[indices[i]] = diffuse;
+				r_component += ((diffuse.data.component.r * light_color.data.component.r) >> 8) * multiplier;
+				g_component += ((diffuse.data.component.g * light_color.data.component.g) >> 8) * multiplier;
+				b_component += ((diffuse.data.component.b * light_color.data.component.b) >> 8) * multiplier;
             }
-       
+
+			// Point Lights illumination
+			for (std::shared_ptr<PointLight>& light : view.get_point_lights())
+			{
+
+				Color_Buffer_Rgba8888::Color	light_color = light->get_light_color(model->get_transformed_vertices()[indices[i]]);
+				toolkit::Vector4f				direction = light->get_direction(model->get_transformed_vertices()[indices[i]]);
+
+				float multiplier = model->get_transformed_normals()[indices[i]].dot_product(direction);
+
+				if (multiplier > 1)
+				{
+					multiplier = 1;
+				}
+				else if (multiplier < 0)
+				{
+					multiplier = 0;
+				}
+
+				diffuse* material.get_kd();
+				light_color* material.get_kl();
+
+				r_component += ((diffuse.data.component.r * light_color.data.component.r) >> 8) * multiplier;
+				g_component += ((diffuse.data.component.g * light_color.data.component.g) >> 8) * multiplier;
+				b_component += ((diffuse.data.component.b * light_color.data.component.b) >> 8) * multiplier;
+			}
+                material.get_transformed_colors()[indices[i]].set( r_component, g_component, b_component );
+               
+               // material.get_transformed_colors()[indices[i]] = diffuse;       
         }
        
     }   

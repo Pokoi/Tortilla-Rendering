@@ -47,7 +47,7 @@ namespace Rendering3D
 
 		Light(Color_Buffer_Rgba8888::Color color) : light_color{ color } {}
 
-        virtual toolkit::Vector4f get_direction(toolkit::Point4f point) = 0;
+		virtual toolkit::Vector4f get_direction(toolkit::Point4f point) = 0;
 		
 		Color_Buffer_Rgba8888::Color get_light_color(toolkit::Point4f point)
 		{	
@@ -113,17 +113,18 @@ namespace Rendering3D
 
         toolkit::Vector4f direction;
 
-        DirectionalLight(Color_Buffer_Rgba8888::Color color, toolkit::Vector4f direction) : Light{ color }, direction{ direction } {}
+        DirectionalLight(Color_Buffer_Rgba8888::Color color, toolkit::Vector4f direction) : Light{ color }, direction{ direction } 
+		{
+			float v = std::sqrt(std::pow(direction[0], 2) + std::pow(direction[1], 2) + std::pow(direction[2], 2));
+			v = 1 / v;
+			direction[0] *= v;
+			direction[1] *= v;
+			direction[2] *= v;
+			direction[3] = 0.f;
+		}
 
         virtual toolkit::Vector4f get_direction(toolkit::Point4f point) override
         {
-            float v = std::sqrt(std::pow(direction[0], 2) + std::pow(direction[1], 2) + std::pow(direction[2], 2));
-            v = 1 / v;
-            direction[0] *= v;
-            direction[1] *= v;
-            direction[2] *= v;
-            direction[3] = 0.f;
-
             return	direction;
         }
 

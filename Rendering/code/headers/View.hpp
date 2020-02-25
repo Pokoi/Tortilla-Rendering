@@ -16,9 +16,8 @@
     #include <Point.hpp>
     #include "Rasterizer.hpp"
     #include "Color_Buffer_Rgb565.hpp"
-    #include "Color_Buffer_Rgba8888.hpp"
+    #include "Color_Buffer_Rgba8888.hpp"	
 	
-	#include <map>				// For model collection
 	#include <Model.hpp>		// For model collection
     #include <string>
 
@@ -53,12 +52,16 @@
 
             Camera	camera;
             
-            std::vector<Light> lights;
+			//////////////////////////////////////////////////////////
+			// Lights
+            std::vector<std::shared_ptr<DirectionalLight>> directional_lights;
+			std::vector<std::shared_ptr<PointLight>> point_lights;
 
-            Color_Buffer_Rgba8888::Color ambient_color{  117, 28, 83, 255  };			
-
-            std::map<std::string, std::shared_ptr<Model>> models;
+			//////////////////////////////////////////////////////////
+			// Models
+            std::vector<std::shared_ptr<Model>> models;
             
+            Color_Buffer_Rgba8888::Color ambient_color{  117, 28, 83, 255  };			
 
         public:
 
@@ -87,10 +90,15 @@
                 return camera;
             }
 
-			std::vector<Light> & get_lights()
+			std::vector<std::shared_ptr<DirectionalLight>> & get_directional_lights()
 			{
-				return lights;
+				return directional_lights;
 			}			
+
+			std::vector<std::shared_ptr<PointLight>>& get_point_lights()
+			{
+				return point_lights;
+			}
 
             Color_Buffer_Rgba8888::Color get_ambient_color()
             {
