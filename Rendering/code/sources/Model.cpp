@@ -108,39 +108,24 @@ namespace Rendering3D
 		/////////////////////////////////////////////////////////////////////////////////////
 	}
 
-	Transform Model::get_transform()
+	Transform & Model::get_transform()
 	{
-		if (parent)
-		{
-			(*transform)* parent->get_transform();
-		}
-
 		return *transform;
 	}
 
 	void Model::Update(float delta, View & view)
 	{
-		static float angle = 0.f;
-
-		// To rotate the model in runtime
-		angle += 0.050f;
-
-		// Modify transformations matrices
-		transform->scaling.set(0.0002f);
-        transform->rotation_y.set<toolkit::Rotation3f::AROUND_THE_Y_AXIS>(angle);
-        //transform->rotation_x.set<toolkit::Rotation3f::AROUND_THE_X_AXIS>(80);
-        //transform->rotation_z.set<toolkit::Rotation3f::AROUND_THE_Z_AXIS>(-angle);
-		transform->translation.set(0, 0.f, -2);
+		transform->update_transform();
 		
-		// Unify transformation matrix with parent transformation
+		// Apply camera transformations
         transformation = view.get_camera().get_projection() * get_transform().get_transformation();
 
 		// Transformation per vertex
         
         for (size_t index = 0; index < original_vertices.size(); ++index)
         {
-            toolkit::Point4f& vertex = transformed_vertices[index] = toolkit::Matrix44f(transformation) * toolkit::Matrix41f(original_vertices[index]);
-            toolkit::Vector4f& normal = transformed_normals[index] = toolkit::Matrix44f(transformation) * toolkit::Matrix41f(original_normals[index]);
+            toolkit::Point4f& vertex	= transformed_vertices[index]	= toolkit::Matrix44f(transformation) * toolkit::Matrix41f(original_vertices[index]);
+            toolkit::Vector4f& normal	= transformed_normals[index]	= toolkit::Matrix44f(transformation) * toolkit::Matrix41f(original_normals[index]);
 
             // Normalize last value for perspective transformation
             float vertex_divisor = 1.f / vertex[3];

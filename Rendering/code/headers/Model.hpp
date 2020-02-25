@@ -76,7 +76,7 @@ namespace Rendering3D
 			return display_vertices;
 		}
 
-		Transform get_transform();
+		Transform & get_transform();
 
         std::vector<toolkit::Point4f>& get_original_vertices()
         {
@@ -96,12 +96,7 @@ namespace Rendering3D
         std::vector<toolkit::Vector4f> & get_transformed_normals()
         {
             return transformed_normals;
-        }
-
-        toolkit::Transformation3f get_transformation()
-        {
-            return transformation;
-        }
+        }      
 
 		void Update(float delta, class View& view);		
 

@@ -26,9 +26,7 @@ int main ()
 
     Window window(VideoMode(window_width, window_height), "3DAvanzado | Jesus Fermin Villar Ramirez - 3D Rendering", Style::Titlebar | Style::Close, ContextSettings(32));
     View   view  (window_width, window_height);
-
-
-	Model model("deer.obj");
+	 	
 
     // Initialization:
 
@@ -65,17 +63,12 @@ int main ()
 
         // Update the view:
 
-        view.update ();
-        model.Update(0, view);
+        view.update ();        
 
         // Repaint the view:
 
-        //view.paint ();
-
-        view.clear();
-		model.Render(view);
-        view.swap();
-
+        view.paint ();
+        
         // Swap the OpenGL buffers:
 
         window.display ();
