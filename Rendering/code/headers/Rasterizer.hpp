@@ -17,6 +17,8 @@
     #include <Point.hpp>
     #include <algorithm>
 
+    #include <ctime>
+
     namespace Rendering3D
     {
 
@@ -71,11 +73,22 @@
 
             void clear ()
             {
+                std::srand(time(NULL));
+
                 color_buffer.set_color(0, 0, 0);
 
                 for (int offset = 0; offset < color_buffer.size(); ++offset)
                 {
-                    color_buffer.set_pixel(offset);
+                    if (rand() % 100 > 99)
+                    {
+                        color_buffer.set_color(255, 255, 255);
+                        color_buffer.set_pixel(offset);
+                    }
+                    else
+                    {
+                        color_buffer.set_color(0, 0, 0);
+                        color_buffer.set_pixel(offset);
+                    }
                 }
                 /*for (Color * c = color_buffer.colors (), * end = c + color_buffer.size (); c < end; c++)
                 {
