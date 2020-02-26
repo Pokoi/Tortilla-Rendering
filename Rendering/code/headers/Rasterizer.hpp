@@ -35,6 +35,7 @@
 
         private:
 
+
             Color_Buffer & color_buffer;
 
             int offset_cache0[1082];
@@ -52,6 +53,7 @@
                 color_buffer(target),
                 z_buffer(target.get_width () * target.get_height ())
             {
+				std::srand(time(NULL));
             }
 
             const Color_Buffer & get_color_buffer () const
@@ -72,14 +74,13 @@
             }
 
             void clear ()
-            {
-                std::srand(time(NULL));
+            {               
 
                 color_buffer.set_color(0, 0, 0);
 
                 for (int offset = 0; offset < color_buffer.size(); ++offset)
                 {
-                    if (rand() % 100 > 99)
+                    if (rand() % 1000 > 995)
                     {
                         color_buffer.set_color(255, 255, 255);
                         color_buffer.set_pixel(offset);
