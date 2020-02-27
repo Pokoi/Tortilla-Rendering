@@ -34,6 +34,8 @@
 #include <cmath>
 #include <Point.hpp>
 
+#include <View.hpp>		// For update
+
 namespace Rendering3D
 {
 
@@ -50,7 +52,7 @@ namespace Rendering3D
 
 		virtual toolkit::Vector4f get_direction(toolkit::Point4f point) = 0;
 		
-		Color_Buffer_Rgba8888::Color get_light_color(toolkit::Point4f point)
+		virtual Color_Buffer_Rgba8888::Color get_light_color(toolkit::Point4f point)
 		{	
             /*
             float distance = std::sqrt  (
@@ -74,22 +76,31 @@ namespace Rendering3D
            //*/
             
             return light_color;            
+		}      
+
+		Transform & get_transform()
+		{
+			return transform;
 		}
 
-        void set_position(toolkit::Vector3f & position)
-        {
-            transform.translation.set(position);
-        }
+		void Update(float delta, View & view)
+		{
+			transform.update_transform();
+
+			transform.transformation = view.get_camera().get_projection() * transform.get_transformation();
+		}
 
 	};
 
     class PointLight : public Light
     {
+		float attenuation = 0;
+
     public:       
 
-        PointLight(Color_Buffer_Rgba8888::Color color, toolkit::Vector3f position) : Light{ color }
+		PointLight(Color_Buffer_Rgba8888::Color color, toolkit::Vector3f position, float attenuation) : Light{ color }, attenuation{ attenuation }
         {
-            set_position(position);
+			transform.set_position(position);
         }
 
         virtual toolkit::Vector4f get_direction(toolkit::Point4f point)
@@ -97,9 +108,9 @@ namespace Rendering3D
 
             toolkit::Vector4f direction{
                                             {
-                                                toolkit::Matrix44f(transform.transformation)[3][0] - point.coordinates().get_values()[0],
-                                                toolkit::Matrix44f(transform.transformation)[3][1] - point.coordinates().get_values()[1],
-                                                toolkit::Matrix44f(transform.transformation)[3][2] - point.coordinates().get_values()[2],
+                                                toolkit::Matrix44f(transform.transformation)[0][3] - point.coordinates().get_values()[0],
+                                                toolkit::Matrix44f(transform.transformation)[1][3] - point.coordinates().get_values()[1],
+                                                toolkit::Matrix44f(transform.transformation)[2][3] - point.coordinates().get_values()[2],
                                                 0
                                             }
             };
@@ -113,6 +124,31 @@ namespace Rendering3D
 
             return	direction;
         }
+
+		virtual Color_Buffer_Rgba8888::Color get_light_color(toolkit::Point4f point) override
+		{
+			
+			float self_x = toolkit::Matrix44f(transform.transformation)[0][3];
+			float self_y = toolkit::Matrix44f(transform.transformation)[1][3];
+			float self_z = toolkit::Matrix44f(transform.transformation)[2][3];
+
+
+			float distance = std::sqrt  (
+											std::pow ( point.coordinates().get_values()[0] - toolkit::Matrix44f(transform.transformation)[0][3], 2) +
+											std::pow ( point.coordinates().get_values()[1] - toolkit::Matrix44f(transform.transformation)[1][3], 2) +
+											std::pow ( point.coordinates().get_values()[2] - toolkit::Matrix44f(transform.transformation)[2][3], 2)
+
+										);
+			
+
+			Color_Buffer_Rgba8888::Color color = light_color;
+
+			color * (1/distance * attenuation) ;
+		   
+
+			return color;
+		}
+
     };
 
     class DirectionalLight : public Light
@@ -133,8 +169,8 @@ namespace Rendering3D
 		}
 
         virtual toolkit::Vector4f get_direction(toolkit::Point4f point) override
-        {
-            return	direction;
+        {			
+			return	direction;
         }
 
     };

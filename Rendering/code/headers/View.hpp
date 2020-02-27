@@ -51,8 +51,7 @@
 	#include <Model.hpp>		// For model collection
     #include <string>
 
-    #include <Camera.hpp>       // For camera reference
-	#include <Light.hpp>		// for light referece
+    #include <Camera.hpp>       // For camera reference	
 
     namespace Rendering3D
     {
@@ -84,14 +83,14 @@
             
 			//////////////////////////////////////////////////////////
 			// Lights
-            std::vector<std::shared_ptr<DirectionalLight>> directional_lights;
-			std::vector<std::shared_ptr<PointLight>> point_lights;
+            std::vector<std::shared_ptr<class DirectionalLight>> directional_lights;
+			std::vector<std::shared_ptr<class PointLight>> point_lights;
 
 			//////////////////////////////////////////////////////////
 			// Models
             std::vector<std::shared_ptr<Model>> models;
             
-            Color_Buffer_Rgba8888::Color ambient_color{ 247, 223, 186, 255  };			
+            Color_Buffer_Rgba8888::Color ambient_color{ 50, 50, 50, 255  };			
 
         public:
 
@@ -120,12 +119,12 @@
                 return camera;
             }
 
-			std::vector<std::shared_ptr<DirectionalLight>> & get_directional_lights()
+			std::vector<std::shared_ptr<class DirectionalLight>> & get_directional_lights()
 			{
 				return directional_lights;
 			}			
 
-			std::vector<std::shared_ptr<PointLight>>& get_point_lights()
+			std::vector<std::shared_ptr<class PointLight>>& get_point_lights()
 			{
 				return point_lights;
 			}

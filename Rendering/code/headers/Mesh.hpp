@@ -55,6 +55,15 @@ namespace Rendering3D
 
 		void Render(class View & view);
 
+		void set_material(Material material)
+		{
+			this->material = material;
+		}
+
+		Material& get_material()
+		{
+			return material;
+		}
 
     private:
 
@@ -65,6 +74,7 @@ namespace Rendering3D
         void NDC_transformation();
 
         void display_coordinates_transformation(size_t width, size_t height);
+
 
 	};
 }

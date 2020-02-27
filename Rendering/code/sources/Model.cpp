@@ -96,7 +96,8 @@ namespace Rendering3D
 				}
 
                 index_offset += indices.size();
-				meshes.push_back(std::make_shared<Mesh>(indices, this));               
+				std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(indices, this);				
+				meshes.push_back(mesh);               
 			}
 		}
 
@@ -158,4 +159,9 @@ namespace Rendering3D
             mesh->Render(view);
         }
     }
+
+	Material& Model::get_material(size_t index)
+	{
+		return meshes[index]->get_material();
+	}
 }

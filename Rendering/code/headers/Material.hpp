@@ -54,8 +54,8 @@ namespace Rendering3D
         {
             transformed_colors.resize(colors_size);
             ka = 0.05f;
-            kd = 0.05f;
-            kl = 0.9f;
+            kd = 1.f;
+            kl = 0.4f;
         }
 
         Color_Buffer_Rgba8888::Color & get_color()
@@ -102,5 +102,25 @@ namespace Rendering3D
         {
             return kl;
         }
+
+		void set_ka( float ka )
+		{
+			this->ka = ka;
+		}
+
+		void set_kd( float kd )
+		{
+			this->kd = kd;
+		}
+
+		void set_kl( float kl )
+		{
+			this->kl = kl;
+		}
+
+		void set_color(Color_Buffer_Rgba8888::Color color)
+		{
+			this->original_color = color;
+		}
 	};
 }

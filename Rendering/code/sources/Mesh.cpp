@@ -42,6 +42,7 @@
 #include <Clipping.hpp>     // For polygon clipping
 
 #include <Color_Buffer_Rgba8888.hpp> // For illumination
+#include <Light.hpp>				 // For illumination
 
 
 namespace Rendering3D
@@ -123,6 +124,8 @@ namespace Rendering3D
 			float g_component = 0;
 			float b_component = 0;
 
+			diffuse * material.get_kd();
+
 			// Directional lights illumination
             for (std::shared_ptr<DirectionalLight> & light : view.get_directional_lights())
             {
@@ -135,12 +138,14 @@ namespace Rendering3D
 				{
 					multiplier = 1;
 				}
-				else if (multiplier < 0)
+				
+					if (multiplier < 0)
 				{
 					multiplier = 0;
 				}
+				
              
-                //diffuse		* material.get_kd();
+                
                 light_color * material.get_kl();
 
 				r_component += ((diffuse.data.component.r * light_color.data.component.r) >> 8) * multiplier;
@@ -167,8 +172,7 @@ namespace Rendering3D
 				{
 					multiplier = 0;
 				}
-
-				diffuse* material.get_kd();
+				
 				light_color* material.get_kl();
 
 				r_component += ((diffuse.data.component.r * light_color.data.component.r) >> 8) * multiplier;
@@ -182,9 +186,8 @@ namespace Rendering3D
             b_component += ambient.data.component.b * material.get_ka();
 
             // Set the final color
-            material.get_transformed_colors()[indices[i]].set( r_component, g_component, b_component );
-               
-            // material.get_transformed_colors()[indices[i]] = diffuse;       
+            material.get_transformed_colors()[indices[i]].set( r_component, g_component, b_component );              
+                 
         }
        
     }   

@@ -101,6 +101,8 @@ namespace Rendering3D
 		void Update(float delta, class View& view);		
 
         void Render(class View& view);
+
+		class Material& get_material(size_t index);
 	
 	};
 }

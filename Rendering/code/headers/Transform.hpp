@@ -49,11 +49,14 @@ namespace Rendering3D
 
 		Transform					* parent = nullptr;
 
-		float scale			= 1.f;
-		float angular_speed = 0.f;
-		toolkit::Vector3f position{ {0.f, 0.f, 0.f} };
+		float scale				= 1.f;
+		float angular_speed		= 0.f;
+		float translation_speed	= 0.f;
+
+		toolkit::Vector3f initial_position{ {0.f, 0.f, 0.f} };
 		toolkit::Vector3f initial_rotation{ {0.f, 0.f, 0.f} };
 		toolkit::Vector3f rotation_axis{ {0.f, 0.f, 0.f} };
+		toolkit::Vector3f translation_axis{ {0.f, 0.f, 0.f} };
 		      
 
         toolkit::Transformation3f get_transformation()
@@ -68,7 +71,8 @@ namespace Rendering3D
 
 		void set_position(toolkit::Vector3f position)
 		{
-			this->position = position;
+			this->initial_position = position;
+			translation.set(position);
 		}
 
 		void set_initial_rotation(toolkit::Vector3f rotation)
@@ -81,6 +85,11 @@ namespace Rendering3D
 			this->rotation_axis = axis;
 		}
 
+		void set_translation_axis(toolkit::Vector3f axis)
+		{
+			this->translation_axis = axis;
+		}
+
 		void set_parent(Transform* parent)
 		{
 			this->parent = parent;
@@ -91,18 +100,32 @@ namespace Rendering3D
 			this->angular_speed = speed;
 		}
 
+		void set_translation_speed(float speed)
+		{
+			this->translation_speed = speed;
+		}
+
 		void update_transform()
 		{
 			scaling.set(scale);
 			
-			static float speed;
-			speed += angular_speed;					
+			static float rot_speed;
+			rot_speed += angular_speed;
 
-			rotation_x.set<toolkit::Rotation3f::AROUND_THE_X_AXIS>(initial_rotation.coordinates().get_values()[0] + speed * rotation_axis.coordinates().get_values()[0]);
-			rotation_y.set<toolkit::Rotation3f::AROUND_THE_Y_AXIS>(initial_rotation.coordinates().get_values()[1] + speed * rotation_axis.coordinates().get_values()[1]);
-			rotation_z.set<toolkit::Rotation3f::AROUND_THE_Z_AXIS>(initial_rotation.coordinates().get_values()[2] + speed * rotation_axis.coordinates().get_values()[2]);
 
-			translation.set(position);
+			rotation_x.set<toolkit::Rotation3f::AROUND_THE_X_AXIS>(initial_rotation.coordinates().get_values()[0] + rot_speed * rotation_axis.coordinates().get_values()[0]);
+			rotation_y.set<toolkit::Rotation3f::AROUND_THE_Y_AXIS>(initial_rotation.coordinates().get_values()[1] + rot_speed * rotation_axis.coordinates().get_values()[1]);
+			rotation_z.set<toolkit::Rotation3f::AROUND_THE_Z_AXIS>(initial_rotation.coordinates().get_values()[2] + rot_speed * rotation_axis.coordinates().get_values()[2]);
+
+			static float tran_speed;
+			tran_speed += translation_speed;
+
+			toolkit::Vector3f new_position	{ {
+												initial_position.coordinates().get_values()[0] + tran_speed * translation_axis.coordinates().get_values()[0],
+												initial_position.coordinates().get_values()[1] + tran_speed * translation_axis.coordinates().get_values()[1],
+												initial_position.coordinates().get_values()[2] + tran_speed * translation_axis.coordinates().get_values()[2]
+											} };
+			translation.set(new_position);
 
 			if (parent != nullptr)
 			{
