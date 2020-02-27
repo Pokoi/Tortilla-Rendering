@@ -53,28 +53,7 @@ namespace Rendering3D
 		virtual toolkit::Vector4f get_direction(toolkit::Point4f point) = 0;
 		
 		virtual Color_Buffer_Rgba8888::Color get_light_color(toolkit::Point4f point)
-		{	
-            /*
-            float distance = std::sqrt  (
-                                            std::pow ( point.coordinates().get_values()[0] - toolkit::Matrix44f(transform.transformation)[3][0], 2) +
-                                            std::pow ( point.coordinates().get_values()[1] - toolkit::Matrix44f(transform.transformation)[3][1], 2) +
-                                            std::pow ( point.coordinates().get_values()[2] - toolkit::Matrix44f(transform.transformation)[3][2], 2)
-                                        
-                                        );
-            if (distance < 0)
-            {
-                distance = 0;
-            }
-            else if (distance > 5)
-            {
-                distance = 5;
-            }
-
-            Color_Buffer_Rgba8888::Color color = light_color;
-
-            color * distance ;
-           //*/
-            
+		{          
             return light_color;            
 		}      
 
@@ -169,8 +148,17 @@ namespace Rendering3D
 		}
 
         virtual toolkit::Vector4f get_direction(toolkit::Point4f point) override
-        {			
-			return	direction;
+        {   
+            toolkit::Vector4f new_direction{ {point.coordinates().get_values()[0] + direction[0], point.coordinates().get_values()[1] + direction[1], point.coordinates().get_values()[2] + direction[2] } };
+
+            float v = std::sqrt(std::pow(new_direction[0], 2) + std::pow(new_direction[1], 2) + std::pow(new_direction[2], 2));
+            v = 1 / v;
+            new_direction[0] *= v;
+            new_direction[1] *= v;
+            new_direction[2] *= v;
+            new_direction[3] = 0.f;
+
+            return	new_direction;
         }
 
     };

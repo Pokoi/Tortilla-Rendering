@@ -54,7 +54,7 @@ namespace Rendering3D
         {
             transformed_colors.resize(colors_size);
             ka = 0.05f;
-            kd = 1.f;
+            kd = 0.6f;
             kl = 0.4f;
         }
 

@@ -149,6 +149,7 @@
     <ClCompile Include="..\..\code\sources\main.cpp" />
     <ClCompile Include="..\..\code\sources\Mesh.cpp" />
     <ClCompile Include="..\..\code\sources\Model.cpp" />
+    <ClCompile Include="..\..\code\sources\Transform.cpp" />
     <ClCompile Include="..\..\code\sources\View.cpp" />
     <ClCompile Include="..\..\libraries\cpp-toolkit\sources\Input_Stream.cpp" />
     <ClCompile Include="..\..\libraries\cpp-toolkit\sources\Output_Stream.cpp" />

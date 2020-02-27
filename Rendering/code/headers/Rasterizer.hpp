@@ -75,14 +75,13 @@
 
             void clear ()
             {               
-
-                color_buffer.set_color(0, 0, 0);
+              
 
                 for (int offset = 0; offset < color_buffer.size(); ++offset)
                 {
                     if (rand() % 10000 > 9998)
                     {
-                        color_buffer.set_color(255, 255, 255);
+                        color_buffer.set_color(200, 200, 255);
                         color_buffer.set_pixel(offset);
                     }
                     else

@@ -139,13 +139,11 @@ namespace Rendering3D
 					multiplier = 1;
 				}
 				
-					if (multiplier < 0)
+				else if (multiplier < 0)
 				{
 					multiplier = 0;
-				}
-				
+				}			
              
-                
                 light_color * material.get_kl();
 
 				r_component += ((diffuse.data.component.r * light_color.data.component.r) >> 8) * multiplier;

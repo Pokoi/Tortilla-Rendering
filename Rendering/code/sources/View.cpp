@@ -64,46 +64,53 @@ namespace Rendering3D
 		width(width),
 		height(height),
 		Color_buffer(width, height),
-		rasterizer(Color_buffer)
+		rasterizer(Color_buffer),
+        camera{this}
 	{
 
-		std::srand(time(null));
+		std::srand(time(null));      
 
-		std::shared_ptr<DirectionalLight> directional_light = std::make_shared<DirectionalLight>(Color_Buffer_Rgba8888::Color{ 255,0,0,0 }, toolkit::Vector4f{ {1.f, 0.5f, 0.5f, 1.f} });
-		
-		directional_lights.push_back(directional_light);
+        camera.get_transform().set_position({ {0.0f, 0.f, 0.f} });
+        camera.get_transform().set_angular_speed(0.025f);
+        camera.get_transform().set_rotation_axis({ {0.1f, 0.f, 0.f} });
 
-		std::shared_ptr<PointLight> light = std::make_shared<PointLight>(Color_Buffer_Rgba8888::Color{ 255,0,0,0 }, toolkit::Vector3f{ {0.f, -1.5f, 0.f} }, 1);		
-		//point_lights.push_back(light);      
+		std::shared_ptr<DirectionalLight> directional_light = std::make_shared<DirectionalLight>(Color_Buffer_Rgba8888::Color{ 255,0,0,255 }, toolkit::Vector4f{ {0.f, 10.f, -10.f, 1.f} });
 		
+		directional_lights.push_back(directional_light);		
+
+        std::shared_ptr<PointLight> light = std::make_shared<PointLight>(Color_Buffer_Rgba8888::Color{ 0,0,255,0 }, toolkit::Vector3f{ {-2.f, -2.f, 1.f} }, 1);
+        point_lights.push_back(light);      
+
+        std::shared_ptr<PointLight> light2 = std::make_shared<PointLight>(Color_Buffer_Rgba8888::Color{ 0,255,0,0 }, toolkit::Vector3f{ {0.f, -0.f, -4.f} }, 1);
+        point_lights.push_back(light2);
 				
 		std::shared_ptr<Model> ship = std::make_shared<Model>("tie.obj");
 
-		ship->get_transform().set_position({ { 0.f, -1.f, -2.5f } });
-		ship->get_transform().set_scale(0.5f);
+		ship->get_transform().set_position({ { 0.01f, -0.25f, -2.f } });
+		ship->get_transform().set_scale(0.4f);
 		ship->get_transform().set_initial_rotation({ {0.4f, 3.1f, 0.f} });
-		//ship->get_material(0).set_color({51,11,17});
+		ship->get_material(0).set_color({255,255,255});
 
 		models.push_back(ship);
 		
+        {
+
 		std::shared_ptr<Model> moon = std::make_shared<Model>("sphere.obj");
 
-		moon->get_transform().set_position({ { -4.f, 1.5f, -2.5f } });
-		moon->get_transform().set_scale(1.f);
+		moon->get_transform().set_position({ { 0.f, 1.5f, -5.0f } });
+		moon->get_transform().set_scale(1.5f);
 
 		moon->get_transform().set_rotation_axis({ {0.5f, 1.f, 0.f} });
 		moon->get_transform().set_angular_speed(0.05f);
+		
 
-		//moon->get_transform().set_translation_speed(0.01f);
-		//moon->get_transform().set_translation_axis({ {0, 0, -1.f} });
-
-		moon->get_material(0).set_color({ (uint8_t)(rand() % 255), (uint8_t) (rand() % 255), (uint8_t) (rand() % 255),0 });		
+		moon->get_material(0).set_color({ 0, 255, 0,0 });		
 
 		models.push_back(moon);
         
 		std::shared_ptr<Model> moon2 = std::make_shared<Model>("sphere.obj");
 
-		moon2->get_transform().set_position({ { 0.f, 0.f, -1.f } });
+		moon2->get_transform().set_position({ { 0.f, 0.f, -1.25f } });
 		moon2->get_transform().set_scale(0.7f);
 		moon2->get_transform().set_rotation_axis({ {0.f, 1.f, 0.f} });
 		moon2->get_transform().set_angular_speed(0.0025f);
@@ -115,7 +122,7 @@ namespace Rendering3D
 
 		std::shared_ptr<Model> moon3a = std::make_shared<Model>("sphere.obj");
 
-		moon3a->get_transform().set_position({ { 0.f, 0.f, -0.75f } });
+		moon3a->get_transform().set_position({ { 0.f, 0.f, -0.6f } });
 		moon3a->get_transform().set_scale(0.2f);
 		moon3a->get_transform().set_rotation_axis({ {0.f, 1.f, 1.f} });
 		moon3a->get_transform().set_angular_speed(0.005f);
@@ -127,7 +134,7 @@ namespace Rendering3D
 
 		std::shared_ptr<Model> moon3b = std::make_shared<Model>("sphere.obj");
 
-		moon3b->get_transform().set_position({ { -0.5f, 0.f, -1.f } });
+		moon3b->get_transform().set_position({ { -0.5f, 0.f, -0.75f } });
 		moon3b->get_transform().set_scale(0.3f);
 		moon3b->get_transform().set_rotation_axis({ {1.f, 1.f, 0.f} });
 		moon3b->get_transform().set_angular_speed(-0.003f);
@@ -137,21 +144,15 @@ namespace Rendering3D
 
 		models.push_back(moon3b);
 
-		/*
-		std::shared_ptr<Model> asteroid = std::make_shared<Model>("asteroid.obj");
-
-		asteroid->get_transform().set_position({ {-3.f, 0.f, -3.f } });
-		asteroid->get_transform().set_scale(0.05f);
-		asteroid->get_transform().set_rotation_axis({ {1.f, 1.f, 0.f} });
-		asteroid->get_transform().set_angular_speed(-0.003f);
-
-		models.push_back(asteroid);
-		*/
+        }	
+       
 		
     }
 
     void View::update ()
     {
+        camera.Update(0.f);
+
 		for (std::shared_ptr<DirectionalLight>& light : directional_lights)
 		{
 			light->Update(0.f, *this);
@@ -178,16 +179,6 @@ namespace Rendering3D
 		}
 
         rasterizer.get_color_buffer ().gl_draw_pixels (0, 0);
-    }
-
-    void View::clear()
-    {
-        rasterizer.clear();
-    }
-
-    void View::swap()
-    {
-        rasterizer.get_color_buffer().gl_draw_pixels(0, 0);
-    }
+    } 
 
 }

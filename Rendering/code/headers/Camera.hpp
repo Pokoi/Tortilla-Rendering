@@ -42,7 +42,7 @@ namespace Rendering3D
 
     public:
 
-        Camera() : projection{ 1, 50, 90, (float)1000 / (float)600 } {}
+        Camera() : projection{ 1, 50, 90, 1 } {}
 
         Camera(class View * view);
 
@@ -51,10 +51,12 @@ namespace Rendering3D
             return projection;
         }
 
-        Transform get_transform()
+        Transform& get_transform()
         {
             return transform;
-        }       
+        }     
+
+        void Update(float delta);
     };
 }
 

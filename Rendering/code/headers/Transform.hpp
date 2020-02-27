@@ -44,14 +44,18 @@ namespace Rendering3D
         toolkit::Rotation3f			rotation_x;
         toolkit::Rotation3f			rotation_y;
         toolkit::Rotation3f			rotation_z;
-        toolkit::Translation3f		translation; // Modify to translate the model
+        toolkit::Translation3f		translation; 
         toolkit::Transformation3f	transformation;
+        toolkit::Matrix44f          inverse_transformation;
 
 		Transform					* parent = nullptr;
 
 		float scale				= 1.f;
 		float angular_speed		= 0.f;
 		float translation_speed	= 0.f;
+
+        float rot_speed     = 0;
+        float tran_speed    = 0;
 
 		toolkit::Vector3f initial_position{ {0.f, 0.f, 0.f} };
 		toolkit::Vector3f initial_rotation{ {0.f, 0.f, 0.f} };
@@ -105,37 +109,14 @@ namespace Rendering3D
 			this->translation_speed = speed;
 		}
 
-		void update_transform()
-		{
-			scaling.set(scale);
-			
-			static float rot_speed;
-			rot_speed += angular_speed;
+        void update_transform();
 
+        void calculate_inverse_transformation();
 
-			rotation_x.set<toolkit::Rotation3f::AROUND_THE_X_AXIS>(initial_rotation.coordinates().get_values()[0] + rot_speed * rotation_axis.coordinates().get_values()[0]);
-			rotation_y.set<toolkit::Rotation3f::AROUND_THE_Y_AXIS>(initial_rotation.coordinates().get_values()[1] + rot_speed * rotation_axis.coordinates().get_values()[1]);
-			rotation_z.set<toolkit::Rotation3f::AROUND_THE_Z_AXIS>(initial_rotation.coordinates().get_values()[2] + rot_speed * rotation_axis.coordinates().get_values()[2]);
-
-			static float tran_speed;
-			tran_speed += translation_speed;
-
-			toolkit::Vector3f new_position	{ {
-												initial_position.coordinates().get_values()[0] + tran_speed * translation_axis.coordinates().get_values()[0],
-												initial_position.coordinates().get_values()[1] + tran_speed * translation_axis.coordinates().get_values()[1],
-												initial_position.coordinates().get_values()[2] + tran_speed * translation_axis.coordinates().get_values()[2]
-											} };
-			translation.set(new_position);
-
-			if (parent != nullptr)
-			{
-				transformation = parent->get_transformation() * translation * rotation_x * rotation_y * rotation_z * scaling;
-			}
-			else
-			{
-				transformation = translation * rotation_x * rotation_y * rotation_z * scaling;
-			}
-		}
+        toolkit::Matrix44f get_inverse_transformation()
+        {
+            return inverse_transformation;
+        }
 
     };
 }

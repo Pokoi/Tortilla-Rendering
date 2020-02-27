@@ -17,8 +17,8 @@
 using namespace sf;
 using namespace Rendering3D;
 
-static const size_t window_width  = 1000;
-static const size_t window_height = 600;
+static const size_t window_width  = 900;
+static const size_t window_height = 900;
 
 int main ()
 {

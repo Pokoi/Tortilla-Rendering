@@ -32,8 +32,20 @@
 
 namespace Rendering3D
 {
-    Camera::Camera(View* view) : projection{ 1, 50, 90, view->get_width() / view->get_height()}
+    Camera::Camera(View* view) : projection{ 1, 50, 80, view->get_width() / view->get_height()}
     {       
         
+    }
+    void Camera::Update(float delta)
+    {
+        // Change direction at 45 degress
+        if (transform.rot_speed >= 0.785f)
+        {
+            transform.rot_speed = transform.angular_speed;
+            //transform.set_rotation_axis({ {0.f, transform.rotation_axis.coordinates().get_values()[1] * -1, 0.f} });
+        }        
+
+        transform.update_transform();
+        transform.calculate_inverse_transformation();
     }
 }

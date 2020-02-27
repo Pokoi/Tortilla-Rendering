@@ -90,7 +90,7 @@
 			// Models
             std::vector<std::shared_ptr<Model>> models;
             
-            Color_Buffer_Rgba8888::Color ambient_color{ 50, 50, 50, 255  };			
+            Color_Buffer_Rgba8888::Color ambient_color{ 150, 0, 50, 255  };			
 
         public:
 
@@ -133,9 +133,6 @@
             {
                 return ambient_color;
             }
-
-            void clear();
-            void swap();
 
         };
 

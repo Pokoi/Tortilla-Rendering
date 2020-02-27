@@ -118,8 +118,9 @@ namespace Rendering3D
 	{
 		transform->update_transform();
 		
-		// Apply camera transformations
-        transformation = view.get_camera().get_projection() * get_transform().get_transformation();
+		// Apply camera transformations      
+        transformation = view.get_camera().get_transform().get_inverse_transformation() * toolkit::Matrix44f(view.get_camera().get_projection()) * toolkit::Matrix44f(get_transform().get_transformation());
+              
 
 		// Transformation per vertex
         
