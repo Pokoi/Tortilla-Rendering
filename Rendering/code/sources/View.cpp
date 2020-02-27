@@ -65,8 +65,11 @@ namespace Rendering3D
 	{
 		directional_lights.push_back(std::make_shared<DirectionalLight>(Color_Buffer_Rgba8888::Color{ 255,255,255,255 }, toolkit::Vector4f{ {0.5f, 0.5f, 0.5f, 1.f} }));
 
-		/*std::shared_ptr<PointLight> light = std::make_shared<PointLight>(Color_Buffer_Rgba8888::Color{ 255,255,255,255 }, toolkit::Vector3f{ {0, -0.5f, 0} });
-		point_lights.push_back(light);*/
+		std::shared_ptr<PointLight> light = std::make_shared<PointLight>(Color_Buffer_Rgba8888::Color{ 255,255,255,255 }, toolkit::Vector3f{ {-2.f, 1.f, 0} });
+		point_lights.push_back(light);
+
+        std::shared_ptr<PointLight> light2 = std::make_shared<PointLight>(Color_Buffer_Rgba8888::Color{ 255,255,255,255 }, toolkit::Vector3f{ {2.f, -1.f, 0} });
+        point_lights.push_back(light2);
 
 		
 		/*
@@ -108,19 +111,19 @@ namespace Rendering3D
 		
 		std::shared_ptr<Model> moon = std::make_shared<Model>("sphere.obj");
 
-		moon->get_transform().set_position({ { -2.f, 0.f, -3.f } });
+		moon->get_transform().set_position({ { -4.f, 0.7f, -3.f } });
 		moon->get_transform().set_scale(1.f);		
-		moon->get_transform().set_rotation_axis({ {0.f, 1.f, 0.f} });
-		moon->get_transform().set_angular_speed(0.0025f);
+		moon->get_transform().set_rotation_axis({ {0.5f, 1.f, 0.f} });
+		moon->get_transform().set_angular_speed(0.05f);
 
 		models.push_back(moon);
         
 		std::shared_ptr<Model> moon2 = std::make_shared<Model>("sphere.obj");
 
-		moon2->get_transform().set_position({ { 0.f, 0.f, -2.f } });
-		moon2->get_transform().set_scale(1.f);
-		//moon2->get_transform().set_rotation_axis({ {0.f, 1.f, 0.f} });
-		//moon2->get_transform().set_angular_speed(0.0025f);
+		moon2->get_transform().set_position({ { 0.f, 0.f, -1.f } });
+		moon2->get_transform().set_scale(0.7f);
+		moon2->get_transform().set_rotation_axis({ {0.f, 1.f, 0.f} });
+		moon2->get_transform().set_angular_speed(0.0025f);
 		moon2->get_transform().set_parent(&moon->get_transform());
 
 		models.push_back(moon2);
