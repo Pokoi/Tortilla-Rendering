@@ -30,22 +30,39 @@
 #include <Camera.hpp>
 #include <View.hpp>
 
+#include <math.h>
+
 namespace Rendering3D
 {
-    Camera::Camera(View* view) : projection{ 1, 50, 80, view->get_width() / view->get_height()}
+    Camera::Camera(View* view) : projection{ 1, 50, initial_fov, view->get_width() / view->get_height()}
     {       
         
     }
-    void Camera::Update(float delta)
+    void Camera::Update(float delta, View & view)
     {
-        // Change direction at 45 degress
-        if (transform.rot_speed >= 0.785f)
+        static float fov_modificator    = 0;
+        static float dissplacement      = 0;
+
+        fov_modificator += 0.0015f;
+        dissplacement   += std::abs(transform.angular_speed);       
+    
+
+        if (dissplacement > 0.5f)
         {
-            transform.rot_speed = transform.angular_speed;
-            //transform.set_rotation_axis({ {0.f, transform.rotation_axis.coordinates().get_values()[1] * -1, 0.f} });
-        }        
+            transform.angular_speed *= -1.f;
+            fov_modificator *= -1.f;
+            dissplacement = 0;
+        }
+        
+        change_fov(view, fov_modificator);             
 
         transform.update_transform();
         transform.calculate_inverse_transformation();
+    }
+
+    void Camera::change_fov(View& view, float modificator)
+    {
+        current_fov += modificator;
+        projection.set(1, 50, current_fov, view.get_width() / view.get_height());
     }
 }

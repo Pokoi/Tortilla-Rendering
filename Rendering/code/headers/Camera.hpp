@@ -39,10 +39,12 @@ namespace Rendering3D
     {
         Transform transform;
 		toolkit::Projection3f projection;
+        float initial_fov = 80.f;
+        float current_fov = 80.f;
 
     public:
 
-        Camera() : projection{ 1, 50, 90, 1 } {}
+        Camera() : projection{ 1, 50, initial_fov, 1 } {}
 
         Camera(class View * view);
 
@@ -56,7 +58,9 @@ namespace Rendering3D
             return transform;
         }     
 
-        void Update(float delta);
+        void Update(float delta, class View& view);
+
+        void change_fov(View& view, float modificator);
     };
 }
 

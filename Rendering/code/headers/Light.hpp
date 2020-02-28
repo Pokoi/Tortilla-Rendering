@@ -65,8 +65,7 @@ namespace Rendering3D
 		void Update(float delta, View & view)
 		{
 			transform.update_transform();
-
-			transform.transformation = view.get_camera().get_projection() * transform.get_transformation();
+            transform.transformation = view.get_camera().get_transform().get_inverse_transformation() * toolkit::Matrix44f(view.get_camera().get_projection()) * toolkit::Matrix44f(get_transform().get_transformation());
 		}
 
 	};
