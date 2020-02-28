@@ -43,11 +43,11 @@ namespace Rendering3D
         static float fov_modificator    = 0;
         static float dissplacement      = 0;
 
-        fov_modificator += 0.0015f;
+        fov_modificator += 0.0005f;
         dissplacement   += std::abs(transform.angular_speed);       
     
 
-        if (dissplacement > 0.5f)
+        if (dissplacement > 0.7f)
         {
             transform.angular_speed *= -1.f;
             fov_modificator *= -1.f;

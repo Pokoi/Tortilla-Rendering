@@ -16,8 +16,13 @@
     #include <stdint.h>
     #include <Point.hpp>
     #include <algorithm>
+    
+    #include <memory>
 
     #include <ctime>
+    #include <cstdlib> 
+
+    #include <Color_Buffer_Rgba8888.hpp>
 
     namespace Rendering3D
     {
@@ -36,7 +41,7 @@
         private:
 
 
-            Color_Buffer & color_buffer;
+            Color_Buffer_Rgba8888 & color_buffer;
 
             int offset_cache0[1082];
             int offset_cache1[1082];
@@ -74,9 +79,7 @@
             }
 
             void clear ()
-            {               
-              
-
+            {   
                 for (int offset = 0; offset < color_buffer.size(); ++offset)
                 {
                     if (rand() % 10000 > 9998)
@@ -98,6 +101,84 @@
                 for (int * z = z_buffer.data (), * end = z + z_buffer.size (); z != end; z++)
                 {
                     *z = std::numeric_limits< int >::max ();
+                }
+            }
+
+            void floyd_steinberg()
+            {   
+                float levels = 0.2;
+                float lNorm = 255 * levels;             
+              
+                Color c;              
+                                
+                int r, g, b;
+                int nr, ng, nb;
+                float er, eg, eb;            
+                
+                for (int offset = 0; offset < color_buffer.size(); ++offset)
+                {
+                    c = *(color_buffer.colors() + offset);
+                    
+                    r = c.data.component.r;
+                    g = c.data.component.g;
+                    b = c.data.component.b;
+
+
+                    nr = (r / 255) * lNorm;
+                    ng = (g / 255) * lNorm;
+                    nb = (b / 255) * lNorm;
+
+                    er = (r - nr);
+                    eg = (g - ng);
+                    eb = (b - nb);
+
+                    color_buffer.set_color(nr, ng, nb);
+                    color_buffer.set_pixel(offset);
+
+                    if (offset + 1 < color_buffer.size())
+                    {
+                        c = *(color_buffer.colors() + offset + 1);
+
+                        r = c.data.component.r;
+                        g = c.data.component.g;
+                        b = c.data.component.b;
+
+                        color_buffer.set_color(r + (er * 7/16), g + (eg * 7/16), b + (eb * 7/16));
+                        color_buffer.set_pixel(offset + 1);
+
+                        if ((offset + color_buffer.get_width() + 1 ) < color_buffer.size())
+                        {
+                            c = *(color_buffer.colors() + offset + 1 + color_buffer.get_width());
+
+                            r = c.data.component.r;
+                            g = c.data.component.g;
+                            b = c.data.component.b;
+
+                            color_buffer.set_color(r + (er * 1 / 16), g + (eg * 1 / 16), b + (eb * 1 / 16));
+                            color_buffer.set_pixel(offset + 1 + color_buffer.get_width());
+                        }
+                    }
+
+                    if ((offset + color_buffer.get_width()) < color_buffer.size())
+                    {
+                        c = *(color_buffer.colors() + offset + color_buffer.get_width());
+
+                        r = c.data.component.r;
+                        g = c.data.component.g;
+                        b = c.data.component.b;
+
+                        color_buffer.set_color(r + (er * 5 / 16), g + (eg * 5 / 16), b + (eb * 5 / 16));
+                        color_buffer.set_pixel(offset + color_buffer.get_width());
+
+                        c = *(color_buffer.colors() + offset + color_buffer.get_width() - 1);
+
+                        r = c.data.component.r;
+                        g = c.data.component.g;
+                        b = c.data.component.b;
+
+                        color_buffer.set_color(r + (er * 3 / 16), g + (eg * 3 / 16), b + (eb * 3 / 16));
+                        color_buffer.set_pixel(offset + color_buffer.get_width() - 1);
+                    }
                 }
             }
 
