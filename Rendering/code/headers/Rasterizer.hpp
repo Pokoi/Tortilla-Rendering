@@ -20,7 +20,7 @@
     #include <memory>
 
     #include <ctime>
-    #include <cstdlib> 
+    #include <math.h> 
 
     #include <Color_Buffer_Rgba8888.hpp>
 
@@ -109,9 +109,9 @@
                 float levels = 0.2;
                 float lNorm = 255 * levels;             
               
-                Color c;              
+                Color c;               
                                 
-                int r, g, b;
+                int r, g, b, grey;
                 int nr, ng, nb;
                 float er, eg, eb;            
                 
@@ -119,10 +119,20 @@
                 {
                     c = *(color_buffer.colors() + offset);
                     
-                    r = c.data.component.r;
-                    g = c.data.component.g;
-                    b = c.data.component.b;
+                    if (c.data.component.r != 0)
+                    {
+                        grey = std::sqrt((c.data.component.r * c.data.component.r + c.data.component.g * c.data.component.g + c.data.component.b * c.data.component.b)/3);
+                    }
+                    else
+                    {
+                        grey = c.data.component.g;
+                    }                    
 
+                    r = 0;
+                    g = grey;
+                    b = 0;   
+
+                    if (g < 5) g = 5;
 
                     nr = (r / 255) * lNorm;
                     ng = (g / 255) * lNorm;
@@ -139,9 +149,20 @@
                     {
                         c = *(color_buffer.colors() + offset + 1);
 
-                        r = c.data.component.r;
-                        g = c.data.component.g;
-                        b = c.data.component.b;
+                        if (c.data.component.r != 0)
+                        {
+                            grey = std::sqrt((c.data.component.r * c.data.component.r + c.data.component.g * c.data.component.g + c.data.component.b * c.data.component.b) / 3);
+                        }
+                        else
+                        {
+                            grey = c.data.component.g;
+                        }
+
+                        r = 0;
+                        g = grey;
+                        b = 0; 
+                        
+                        if (g < 5) g = 5;
 
                         color_buffer.set_color(r + (er * 7/16), g + (eg * 7/16), b + (eb * 7/16));
                         color_buffer.set_pixel(offset + 1);
@@ -150,9 +171,20 @@
                         {
                             c = *(color_buffer.colors() + offset + 1 + color_buffer.get_width());
 
-                            r = c.data.component.r;
-                            g = c.data.component.g;
-                            b = c.data.component.b;
+                            if (c.data.component.r != 0)
+                            {
+                                grey = std::sqrt((c.data.component.r * c.data.component.r + c.data.component.g * c.data.component.g + c.data.component.b * c.data.component.b) / 3);
+                            }
+                            else
+                            {
+                                grey = c.data.component.g;
+                            }
+
+                            r = 0;
+                            g = grey;
+                            b = 0;
+                           
+                            if (g < 5) g = 5;
 
                             color_buffer.set_color(r + (er * 1 / 16), g + (eg * 1 / 16), b + (eb * 1 / 16));
                             color_buffer.set_pixel(offset + 1 + color_buffer.get_width());
@@ -163,23 +195,47 @@
                     {
                         c = *(color_buffer.colors() + offset + color_buffer.get_width());
 
-                        r = c.data.component.r;
-                        g = c.data.component.g;
-                        b = c.data.component.b;
+                        if (c.data.component.r != 0)
+                        {
+                            grey = std::sqrt((c.data.component.r * c.data.component.r + c.data.component.g * c.data.component.g + c.data.component.b * c.data.component.b) / 3);
+                        }
+                        else
+                        {
+                            grey = c.data.component.g;
+                        }
+
+                        r = 0;
+                        g = grey;
+                        b = 0;                      
+
+                        if (g < 5) g = 5;
 
                         color_buffer.set_color(r + (er * 5 / 16), g + (eg * 5 / 16), b + (eb * 5 / 16));
                         color_buffer.set_pixel(offset + color_buffer.get_width());
 
                         c = *(color_buffer.colors() + offset + color_buffer.get_width() - 1);
 
-                        r = c.data.component.r;
-                        g = c.data.component.g;
-                        b = c.data.component.b;
+                        if (c.data.component.r != 0)
+                        {
+                            grey = std::sqrt((c.data.component.r * c.data.component.r + c.data.component.g * c.data.component.g + c.data.component.b * c.data.component.b) / 3);
+                        }
+                        else
+                        {
+                            grey = c.data.component.g;
+                        }
+
+                        r = 0;
+                        g = grey;
+                        b = 0;
+                        
+
+                        if (g < 5) g = 5;
 
                         color_buffer.set_color(r + (er * 3 / 16), g + (eg * 3 / 16), b + (eb * 3 / 16));
                         color_buffer.set_pixel(offset + color_buffer.get_width() - 1);
                     }
                 }
+                
             }
 
             void fill_convex_polygon

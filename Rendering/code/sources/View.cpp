@@ -107,7 +107,7 @@ namespace Rendering3D
 		moon->get_transform().set_scale(1.5f);
 
 		moon->get_transform().set_rotation_axis({ {0.5f, 1.f, 0.f} });
-		moon->get_transform().set_angular_speed(0.05f);
+	    moon->get_transform().set_angular_speed(0.05f);
 		
 
 		moon->get_material(0).set_color({ 255,145,0,255 });
@@ -116,7 +116,7 @@ namespace Rendering3D
         
 		std::shared_ptr<Model> moon2a = std::make_shared<Model>("sphere.obj");
 
-		moon2a->get_transform().set_position({ { 0.f, 0.f, -1.25f } });
+		moon2a->get_transform().set_position({ { 0.f, 1.f, -0.25f } });
 		moon2a->get_transform().set_scale(0.7f);
 		moon2a->get_transform().set_rotation_axis({ {0.f, 1.f, 0.f} });
 		moon2a->get_transform().set_angular_speed(0.0025f);
@@ -129,7 +129,7 @@ namespace Rendering3D
 
 		std::shared_ptr<Model> moon3a = std::make_shared<Model>("sphere.obj");
 
-		moon3a->get_transform().set_position({ { 0.f, 0.f, -0.6f } });
+		moon3a->get_transform().set_position({ { -0.75f, 0.f, -0.6f } });
 		moon3a->get_transform().set_scale(0.2f);
 		moon3a->get_transform().set_rotation_axis({ {0.f, 1.f, 1.f} });
 		moon3a->get_transform().set_angular_speed(0.005f);
@@ -141,7 +141,7 @@ namespace Rendering3D
 
 		std::shared_ptr<Model> moon3b = std::make_shared<Model>("sphere.obj");
 
-		moon3b->get_transform().set_position({ { -0.5f, 0.f, -0.75f } });
+		moon3b->get_transform().set_position({ { 0.f, 0.5f, +0.75f } });
 		moon3b->get_transform().set_scale(0.3f);
 		moon3b->get_transform().set_rotation_axis({ {1.f, 1.f, 0.f} });
 		moon3b->get_transform().set_angular_speed(-0.003f);
