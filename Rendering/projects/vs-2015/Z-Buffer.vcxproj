@@ -98,7 +98,6 @@
     <ClInclude Include="..\..\code\headers\Color_Buffer.hpp" />
     <ClInclude Include="..\..\code\headers\Color_Buffer_Rgb565.hpp" />
     <ClInclude Include="..\..\code\headers\Color_Buffer_Rgba8888.hpp" />
-    <ClInclude Include="..\..\code\headers\Dither.hpp" />
     <ClInclude Include="..\..\code\headers\Light.hpp" />
     <ClInclude Include="..\..\code\headers\Material.hpp" />
     <ClInclude Include="..\..\code\headers\Mesh.hpp" />

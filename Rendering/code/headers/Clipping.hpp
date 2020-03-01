@@ -34,22 +34,56 @@
 
 namespace Rendering3D
 {
+    /**
+    @brief Enumeration of types of limits
+    */
     enum class LimitTypes {horizontal, vertical, diagonal};
 
+    /**
+    @brief Screen limit 
+    */
     struct Limit
     {
+        /**
+        @brief The origin coordinates
+        */
         toolkit::Point4i origin;
+
+        /**
+        @brief The end coordinates
+        */
         toolkit::Point4i end;
+
+        /**
+        @brief The type of the limit
+        */
         LimitTypes type;
 
+        /**
+        @brief Creates a instance 
+        @param origin The origin point of the limit
+        @param end The end point of the limit
+        @param type The type of the limit
+        */
         Limit(toolkit::Point4i origin, toolkit::Point4i end, LimitTypes type) : origin{ origin }, end{ end }, type{ type }
         {  }
 
+        /**
+        @brief Calculates if a rect line described by the given points intersects this limit
+        @param other_origin The rect line origin coordinates
+        @param other_end The rect line end coordinates
+        @return True if intersects, false otherwise
+        */
         bool intersects(toolkit::Point4i other_origin, toolkit::Point4i other_end)
         {
             return (*this < other_origin && *this > other_end) || (*this > other_origin && *this < other_end);
         }
 
+        /**
+        @brief Compares if a given point is below the limit
+        @param point The given point to compare
+        @return True if is below, false otherwise
+        */
         bool operator < (toolkit::Point4i point)
         {
             if (type == LimitTypes::horizontal)
@@ -65,8 +99,15 @@ namespace Rendering3D
                 // To implement
                 return false;
             }
-        }
 
+            return false;
+        }
+        
+        /**
+        @brief Compares if a given point is above the limit
+        @param point The given point to compare
+        @return True if is above, false otherwise
+        */
         bool operator > (toolkit::Point4i point)
         {
             if (type == LimitTypes::horizontal)
@@ -82,8 +123,16 @@ namespace Rendering3D
                 // To implement
                 return false;
             }
+
+            return false;
         }
 
+        /**
+        @brief Calculates the intersection point between a given line and the limit
+        @param other_origin The given line origin coordinate
+        @param other_end The given line end coordinate
+        @return The intersection point
+        */
 		toolkit::Point4i intersection_point(toolkit::Point4i other_origin, toolkit::Point4i other_end)
 		{
 			// Line of this limit is a1x + b1y = c1
@@ -105,17 +154,22 @@ namespace Rendering3D
 			//double z = other_origin.coordinates().get_values()[2] + (x / (other_end.coordinates().get_values()[0] - other_origin.coordinates().get_values()[0]))* (other_end.coordinates().get_values()[2] - other_origin.coordinates().get_values()[2]);
 
 			double z = 1;
-			return { {(int)x,(int)y,(int)z,1} };
-		
+			return { {(int)x,(int)y,(int)z,1} };		
 		}
-
     };
 
+    /**
+    @brief Clipping manager   
+    */
     class Clipping
     {
 
     public:
 
+        /**
+        @brief Gets the instance of the class. If its not created, it creates one
+        @return A reference to the instance
+        */
         static Clipping& get()
         {
             static Clipping instance = Clipping();
@@ -125,10 +179,24 @@ namespace Rendering3D
 
     private:
 
+        /**
+        @brief Creates an instance
+        */
         Clipping() {}
 
     public:
 
+        /**
+        @brief Polygon clipping following Sutherland-Hodgman method
+        @param vertices A pointer to the original vertices
+        @param first A pointer to the first vertice of the polygon to clip
+        @param last A pointer to the last vertice of the polygon to clip
+        @param viewport_width The width of the viewport
+        @param viewport_height The height of the viewport
+        @param clipped_vertices A reference to the vertices clipped
+
+        @return The number of vertices of the clipped polygon
+        */
         int polygon_clipper(
             toolkit::Point4i           *    vertices,
             const int                  *    first,
@@ -172,6 +240,12 @@ namespace Rendering3D
             return clipped_vertices.size();
         }
 
+        /**
+        @brief Clip by bottom limit
+        @param input A reference to the input vector of points
+        @param output A reference to the output vector of points
+        @param limit The limit to check with
+        */
         void check_bottom_limit   (
                                         std::vector<toolkit::Point4i>& input,
                                         std::vector<toolkit::Point4i>& output,
@@ -212,6 +286,12 @@ namespace Rendering3D
             }
         }
 
+        /**
+       @brief Clip by right limit
+       @param input A reference to the input vector of points
+       @param output A reference to the output vector of points
+       @param limit The limit to check with
+       */
 		void check_right_limit(
 			std::vector<toolkit::Point4i>& input,
 			std::vector<toolkit::Point4i>& output,
@@ -249,6 +329,12 @@ namespace Rendering3D
             }
 		}
 
+        /**
+        @brief Clip by top limit
+        @param input A reference to the input vector of points
+        @param output A reference to the output vector of points
+        @param limit The limit to check with
+        */
 		void check_top_limit(
 			std::vector<toolkit::Point4i>& input,
 			std::vector<toolkit::Point4i>& output,
@@ -288,6 +374,12 @@ namespace Rendering3D
             }
 		}
 
+        /**
+        @brief Clip by left limit
+        @param input A reference to the input vector of points
+        @param output A reference to the output vector of points
+        @param limit The limit to check with
+        */
 		void check_left_limit(
 			std::vector<toolkit::Point4i>& input,
 			std::vector<toolkit::Point4i>& output,
@@ -327,6 +419,11 @@ namespace Rendering3D
             }
 		}
         
+        /**
+        @brief Swap the vector
+        @param input A reference to the input vector of points
+        @param output A reference to the output vector of points      
+        */
         void reset_input_output(std::vector<toolkit::Point4i>& input, std::vector<toolkit::Point4i>& output)
         {
             input.swap(output);

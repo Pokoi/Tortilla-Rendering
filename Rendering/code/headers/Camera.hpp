@@ -34,32 +34,78 @@
 
 namespace Rendering3D
 {
-
+    /**
+    @brief: Class that manages camera behaviour    
+    */
     class Camera
     {
+        /**
+        @brief Transform of the camera
+        */
         Transform transform;
+
+        /**
+        @brief Projection's matrix
+        */
 		toolkit::Projection3f projection;
+
+        /**
+        @brief Initial field of view 
+        */
         float initial_fov = 80.f;
+
+        /**
+        @brief Current field of view
+        */
         float current_fov = 80.f;
 
     public:
 
+        /**
+        @brief Creates a camera instance. Default projection values are:
+        ** near field: 1
+        ** far field: 50
+        ** field of view: initial_fov value
+        ** aspect ratio: 1
+        */
         Camera() : projection{ 1, 50, initial_fov, 1 } {}
 
+        /**
+        @brief Creates a camera instance.
+        @param view A pointer to the container view
+        */
         Camera(class View * view);
 
+        /**
+        @brief Gets the projection matrix
+        @return The matrix projection
+        */
         toolkit::Projection3f get_projection()
         {
             return projection;
         }
 
+        /**
+        @brief Gets a reference to the transform 
+        @return The reference to the transform
+        */
         Transform& get_transform()
         {
             return transform;
         }     
 
+        /**
+        @brief Update the camera
+        @param delta The delta time
+        @param view The view reference
+        */
         void Update(float delta, class View& view);
 
+        /**
+        @brief Change the field of view
+        @param view The view reference
+        @param modificator The modification to apply
+        */
         void change_fov(View& view, float modificator);
     };
 }

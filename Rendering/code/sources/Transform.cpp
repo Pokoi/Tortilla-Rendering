@@ -31,12 +31,14 @@
 
 namespace Rendering3D
 {
+    /**
+    @brief Updates the transform
+    */
     void Transform::update_transform()
     {
         scaling.set(scale);
                 
         rot_speed += angular_speed;
-
 
         rotation_x.set<toolkit::Rotation3f::AROUND_THE_X_AXIS>(initial_rotation.coordinates().get_values()[0] + rot_speed * rotation_axis.coordinates().get_values()[0]);
         rotation_y.set<toolkit::Rotation3f::AROUND_THE_Y_AXIS>(initial_rotation.coordinates().get_values()[1] + rot_speed * rotation_axis.coordinates().get_values()[1]);
@@ -45,10 +47,10 @@ namespace Rendering3D
         tran_speed += translation_speed;
 
         toolkit::Vector3f new_position{ {
-                initial_position.coordinates().get_values()[0] + tran_speed * translation_axis.coordinates().get_values()[0],
-                initial_position.coordinates().get_values()[1] + tran_speed * translation_axis.coordinates().get_values()[1],
-                initial_position.coordinates().get_values()[2] + tran_speed * translation_axis.coordinates().get_values()[2]
-            } };
+                                            initial_position.coordinates().get_values()[0] + tran_speed * translation_axis.coordinates().get_values()[0],
+                                            initial_position.coordinates().get_values()[1] + tran_speed * translation_axis.coordinates().get_values()[1],
+                                            initial_position.coordinates().get_values()[2] + tran_speed * translation_axis.coordinates().get_values()[2]
+                                        } };
         translation.set(new_position);
 
         if (parent != nullptr)
@@ -61,6 +63,9 @@ namespace Rendering3D
         }
     }
 
+    /**
+    @brief Calculates the inverse transformation
+    */
     void Transform::calculate_inverse_transformation()
     {
         toolkit::Matrix44f transformation_copy(transformation);

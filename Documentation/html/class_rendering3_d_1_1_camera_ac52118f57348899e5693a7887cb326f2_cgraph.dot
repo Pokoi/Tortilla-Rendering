@@ -1,0 +1,12 @@
+digraph "Rendering3D::Camera::Camera"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node1 [label="Rendering3D::Camera\l::Camera",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip="Creates a camera instance."];
+  Node1 -> Node2 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="Rendering3D::View::\lget_height",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_rendering3_d_1_1_view.html#a0a88d889fca2c252e2567cb0742cc83f",tooltip="Gets the height of the view as copy."];
+  Node1 -> Node3 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="Rendering3D::View::\lget_width",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_rendering3_d_1_1_view.html#aee68b3e26be5c844d3f0a8680d769737",tooltip="Gets the width of the view as copy."];
+}

@@ -1,0 +1,12 @@
+digraph "Rendering3D::Clipping::check_bottom_limit"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="RL";
+  Node1 [label="Rendering3D::Clipping\l::check_bottom_limit",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip="Clip by bottom limit."];
+  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="Rendering3D::Clipping\l::polygon_clipper",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_rendering3_d_1_1_clipping.html#aba534a4870c76acd8365f8eacf907789",tooltip="Polygon clipping following Sutherland-Hodgman method."];
+  Node2 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="Rendering3D::Mesh::\lRender",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_rendering3_d_1_1_mesh.html#af633c14f003a0e61f13cf117724c3664",tooltip="Render the mesh."];
+}

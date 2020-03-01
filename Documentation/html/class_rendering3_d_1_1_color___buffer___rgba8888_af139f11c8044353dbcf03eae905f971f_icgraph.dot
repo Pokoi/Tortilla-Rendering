@@ -1,0 +1,14 @@
+digraph "Rendering3D::Color_Buffer_Rgba8888::set_color"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="RL";
+  Node1 [label="Rendering3D::Color\l_Buffer_Rgba8888::set_color",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
+  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="Rendering3D::Rasterizer\l\< Rendering3D::Color_Buffer\l_Rgba8888 \>::clear",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_rendering3_d_1_1_rasterizer.html#a8585eaa078f8b950fa86a41c2b639d9c",tooltip=" "];
+  Node1 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="Rendering3D::Rasterizer\l\< Rendering3D::Color_Buffer\l_Rgba8888 \>::floyd_steinberg",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_rendering3_d_1_1_rasterizer.html#a7c2ab7be6d80488a3eb4b1ae6c6e6485",tooltip="Apply floyd steinberg dithering."];
+  Node1 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="Rendering3D::Rasterizer\l\< Rendering3D::Color_Buffer\l_Rgba8888 \>::set_color",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_rendering3_d_1_1_rasterizer.html#aa0397ed33c70931a326b96af4448661d",tooltip=" "];
+}

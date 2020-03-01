@@ -34,10 +34,20 @@
 
 namespace Rendering3D
 {
-    Camera::Camera(View* view) : projection{ 1, 50, initial_fov, view->get_width() / view->get_height()}
+    /**
+    @brief Creates a camera instance.
+    @param view A pointer to the container view
+    */
+    Camera::Camera(View* view) : projection{ 1, 50, initial_fov, (float)view->get_width() / (float)view->get_height()}
     {       
         
     }
+
+    /**
+    @brief Update the camera
+    @param delta The delta time
+    @param view The view reference
+    */
     void Camera::Update(float delta, View & view)
     {
         static float fov_modificator    = 0;
@@ -60,6 +70,11 @@ namespace Rendering3D
         transform.calculate_inverse_transformation();
     }
 
+    /**
+    @brief Change the field of view
+    @param view The view reference
+    @param modificator The modification to apply
+    */
     void Camera::change_fov(View& view, float modificator)
     {
         current_fov += modificator;

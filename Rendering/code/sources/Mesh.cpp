@@ -47,7 +47,12 @@
 
 namespace Rendering3D
 {
-	
+
+    /**
+    @brief Creates an instance of this class.
+    @param indices The collecion of indices
+    @param owner  A pointer to the model this mesh belongs to
+    */
 	Mesh::Mesh(
 				std::vector<int> given_indices,				
 				Model * owner
@@ -57,7 +62,10 @@ namespace Rendering3D
 		model   = owner;	
 	}
 	
-	
+    /**
+    @brief Render the mesh
+    @param view A view reference this mesh belongs to
+    */
 	void Mesh::Render(View& view)
 	{
 
@@ -101,6 +109,12 @@ namespace Rendering3D
         }
 	}
 
+    /**
+    @brief Calculates if the polygon is frontface
+    @param projected_vertices the vertices of the polygon
+    @param indices the indices
+    @return True if is frontface, false otherwise
+    */
     bool Mesh::is_frontface(const toolkit::Point4f* const projected_vertices, const int* const indices)
     {
         const toolkit::Point4f & v0 = projected_vertices[indices[0]];
@@ -110,6 +124,10 @@ namespace Rendering3D
         return ((v1[0] - v0[0]) * (v2[1] - v0[1]) - (v2[0] - v0[0]) * (v1[1] - v0[1]) > 0.f);
     }
 
+    /**
+    @brief Illuminate the mesh
+    @param view The reference to the view
+    */
     void Mesh::illuminate(View& view)
     {
         auto normals                = model->get_original_normals();
@@ -184,12 +202,14 @@ namespace Rendering3D
             b_component += ambient.data.component.b * material.get_ka();
 
             // Set the final color
-            material.get_transformed_colors()[indices[i]].set( r_component, g_component, b_component );              
+            material.get_transformed_colors()[indices[i]].set( r_component, g_component, b_component );          
                  
-        }
-       
+        }       
     }   
 
+    /**
+    @brief Transform to normalize device coordinates
+    */
     void Mesh::NDC_transformation()
     {   
         auto & transformed_vertices = model->get_transformed_vertices();
@@ -205,7 +225,11 @@ namespace Rendering3D
         }
     }
 
-
+    /**
+    @brief Transform coordinates to display coordinates
+    @param width The width of the screen
+    @param height The height of the screen
+    */
     void Mesh::display_coordinates_transformation(size_t width, size_t height)
     {
         toolkit::Scaling3f        scaling = toolkit::Scaling3f(float(width / 2), float(height / 2), 100000000.f);

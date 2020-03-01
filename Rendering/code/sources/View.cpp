@@ -58,7 +58,11 @@ using namespace toolkit;
 
 namespace Rendering3D
 {
-
+    /**
+    @brief Creates an instance
+    @param width The width of the view
+    @param height The height of the view
+    */
 	View::View(size_t width, size_t height)
 		:
 		width(width),
@@ -67,94 +71,108 @@ namespace Rendering3D
 		rasterizer(Color_buffer),
         camera{this}
 	{
-
+        // Creates the random seed
 		std::srand(time(null));      
 
-        camera.get_transform().set_position({ {0.0f, 0.f, 0.f} });        
-        camera.get_transform().set_angular_speed(0.0025f);
-        camera.get_transform().set_rotation_axis({ {1.f,0.f, 0.f} });        
+        /////////////////////////////////////////////////////////////////
+        // CAMERA
+        {     
+            camera.get_transform().set_position({ {0.0f, 0.f, 0.f} });        
+            camera.get_transform().set_angular_speed(0.0025f);
+            camera.get_transform().set_rotation_axis({ {1.f,0.f, 0.f} });      
+        }
 
-		std::shared_ptr<DirectionalLight> directional_light = std::make_shared<DirectionalLight>(Color_Buffer_Rgba8888::Color{ 255,0,0,255 }, toolkit::Vector4f{ {0.f, 10.f, -10.f, 1.f} });		
-		directional_lights.push_back(directional_light);        
-
-        std::shared_ptr<DirectionalLight> directional_light2 = std::make_shared<DirectionalLight>(Color_Buffer_Rgba8888::Color{ 252,246,166,255 }, toolkit::Vector4f{ {0.f, 2.f, 1.f, 1.f} });
-        directional_lights.push_back(directional_light2);
-
-        std::shared_ptr<PointLight> light = std::make_shared<PointLight>(Color_Buffer_Rgba8888::Color{ 0,0,255,0 }, toolkit::Vector3f{ {-2.f, -2.f, 1.f} }, 1);
-        point_lights.push_back(light);      
-
-        std::shared_ptr<PointLight> light2 = std::make_shared<PointLight>(Color_Buffer_Rgba8888::Color{ 252,246,166,0 }, toolkit::Vector3f{ {0.f, -0.f, -4.f} }, 1);
-        point_lights.push_back(light2);
-				
-		std::shared_ptr<Model> ship = std::make_shared<Model>("tie.obj");
-
-		ship->get_transform().set_position({ { 0.01f, -0.25f, -2.f } });
-		ship->get_transform().set_scale(0.4f);
-		ship->get_transform().set_initial_rotation({ {0.4f, 3.1f, 0.f} });
-
-        ship->get_transform().set_angular_speed(0.005f);
-        ship->get_transform().set_rotation_axis({ {1.f, 0.f, 1.f} });
-
-		ship->get_material(0).set_color({255,255,255});
-
-		models.push_back(ship);
-		
+        /////////////////////////////////////////////////////////////////
+        // LIGHTS
         {
+		    std::shared_ptr<DirectionalLight> directional_light = std::make_shared<DirectionalLight>(Color_Buffer_Rgba8888::Color{ 255,0,0,255 }, toolkit::Vector4f{ {0.f, 10.f, -10.f, 1.f} });		
+		    directional_lights.push_back(directional_light);        
 
-		std::shared_ptr<Model> moon = std::make_shared<Model>("sphere.obj");
+            std::shared_ptr<DirectionalLight> directional_light2 = std::make_shared<DirectionalLight>(Color_Buffer_Rgba8888::Color{ 252,246,166,255 }, toolkit::Vector4f{ {0.f, 2.f, 1.f, 1.f} });
+            directional_lights.push_back(directional_light2);
 
-		moon->get_transform().set_position({ { 0.f, 1.5f, -5.0f } });
-		moon->get_transform().set_scale(1.5f);
+            std::shared_ptr<PointLight> light = std::make_shared<PointLight>(Color_Buffer_Rgba8888::Color{ 0,0,255,0 }, toolkit::Vector3f{ {-2.f, -2.f, 1.f} }, 1);
+            point_lights.push_back(light);      
 
-		moon->get_transform().set_rotation_axis({ {0.5f, 1.f, 0.f} });
-	    moon->get_transform().set_angular_speed(0.05f);
+            std::shared_ptr<PointLight> light2 = std::make_shared<PointLight>(Color_Buffer_Rgba8888::Color{ 252,246,166,0 }, toolkit::Vector3f{ {0.f, -0.f, -4.f} }, 1);
+            point_lights.push_back(light2);
+        }
+		
+        /////////////////////////////////////////////////////////////////
+        // SPACE SHIP
+        {
+		    std::shared_ptr<Model> ship = std::make_shared<Model>("../../assets/tie.obj");
+
+		    ship->get_transform().set_position({ { 0.01f, -0.25f, -2.f } });
+		    ship->get_transform().set_scale(0.4f);
+		    ship->get_transform().set_initial_rotation({ {0.4f, 3.1f, 0.f} });
+
+            ship->get_transform().set_angular_speed(0.005f);
+            ship->get_transform().set_rotation_axis({ {1.f, 0.f, 1.f} });
+
+		    ship->get_material(0).set_color({255,255,255});
+
+		    models.push_back(ship);
+        }
+		
+        /////////////////////////////////////////////////////////////////
+        // PLANETS
+        { 
+		    std::shared_ptr<Model> moon = std::make_shared<Model>("../../assets/sphere.obj");
+
+		    moon->get_transform().set_position({ { 0.f, 1.5f, -5.0f } });
+		    moon->get_transform().set_scale(1.5f);
+
+		    moon->get_transform().set_rotation_axis({ {0.5f, 1.f, 0.f} });
+	        moon->get_transform().set_angular_speed(0.05f);
 		
 
-		moon->get_material(0).set_color({ 255,145,0,255 });
+		    moon->get_material(0).set_color({ 255,145,0,255 });
 
-		models.push_back(moon);
+		    models.push_back(moon);
         
-		std::shared_ptr<Model> moon2a = std::make_shared<Model>("sphere.obj");
+		    std::shared_ptr<Model> moon2a = std::make_shared<Model>("../../assets/sphere.obj");
 
-		moon2a->get_transform().set_position({ { 0.f, 1.f, -0.25f } });
-		moon2a->get_transform().set_scale(0.7f);
-		moon2a->get_transform().set_rotation_axis({ {0.f, 1.f, 0.f} });
-		moon2a->get_transform().set_angular_speed(0.0025f);
-		moon2a->get_transform().set_parent(&moon->get_transform());
+		    moon2a->get_transform().set_position({ { 0.f, 1.f, -0.25f } });
+		    moon2a->get_transform().set_scale(0.7f);
+		    moon2a->get_transform().set_rotation_axis({ {0.f, 1.f, 0.f} });
+		    moon2a->get_transform().set_angular_speed(0.0025f);
+		    moon2a->get_transform().set_parent(&moon->get_transform());
 
-		moon2a->get_material(0).set_color({ (uint8_t)(rand() % 255), (uint8_t)(rand() % 255), (uint8_t)(rand() % 255),0 });		
+		    moon2a->get_material(0).set_color({ (uint8_t)(rand() % 255), (uint8_t)(rand() % 255), (uint8_t)(rand() % 255),0 });		
 
-		models.push_back(moon2a);
+		    models.push_back(moon2a);
        
 
-		std::shared_ptr<Model> moon3a = std::make_shared<Model>("sphere.obj");
+		    std::shared_ptr<Model> moon3a = std::make_shared<Model>("../../assets/sphere.obj");
 
-		moon3a->get_transform().set_position({ { -0.75f, 0.f, -0.6f } });
-		moon3a->get_transform().set_scale(0.2f);
-		moon3a->get_transform().set_rotation_axis({ {0.f, 1.f, 1.f} });
-		moon3a->get_transform().set_angular_speed(0.005f);
-		moon3a->get_transform().set_parent(&moon2a->get_transform());
+		    moon3a->get_transform().set_position({ { -0.75f, 0.f, -0.6f } });
+		    moon3a->get_transform().set_scale(0.2f);
+		    moon3a->get_transform().set_rotation_axis({ {0.f, 1.f, 1.f} });
+		    moon3a->get_transform().set_angular_speed(0.005f);
+		    moon3a->get_transform().set_parent(&moon2a->get_transform());
 
-		moon3a->get_material(0).set_color({ (uint8_t)(rand() % 255), (uint8_t)(rand() % 255), (uint8_t)(rand() % 255),0 });		
+		    moon3a->get_material(0).set_color({ (uint8_t)(rand() % 255), (uint8_t)(rand() % 255), (uint8_t)(rand() % 255),0 });		
 
-		models.push_back(moon3a);
+		    models.push_back(moon3a);
 
-		std::shared_ptr<Model> moon3b = std::make_shared<Model>("sphere.obj");
+		    std::shared_ptr<Model> moon3b = std::make_shared<Model>("../../assets/sphere.obj");
 
-		moon3b->get_transform().set_position({ { 0.f, 0.5f, +0.75f } });
-		moon3b->get_transform().set_scale(0.3f);
-		moon3b->get_transform().set_rotation_axis({ {1.f, 1.f, 0.f} });
-		moon3b->get_transform().set_angular_speed(-0.003f);
-		moon3b->get_transform().set_parent(&moon2a->get_transform());
+		    moon3b->get_transform().set_position({ { 0.f, 0.5f, +0.75f } });
+		    moon3b->get_transform().set_scale(0.3f);
+		    moon3b->get_transform().set_rotation_axis({ {1.f, 1.f, 0.f} });
+		    moon3b->get_transform().set_angular_speed(-0.003f);
+		    moon3b->get_transform().set_parent(&moon2a->get_transform());
 
-		moon3b->get_material(0).set_color({ (uint8_t)(rand() % 255), (uint8_t)(rand() % 255), (uint8_t)(rand() % 255),0 });		
+		    moon3b->get_material(0).set_color({ (uint8_t)(rand() % 255), (uint8_t)(rand() % 255), (uint8_t)(rand() % 255),0 });		
 
-		models.push_back(moon3b);       
-
-        }      
-		
+		    models.push_back(moon3b);  
+        }  
     }
 
+    /**
+    @brief Updates the view
+    */
     void View::update ()
     {
         camera.Update(0.f, *this);
@@ -175,6 +193,9 @@ namespace Rendering3D
 		}
     }
 
+    /**
+    @brief Renders the view
+    */
     void View::paint ()
     {      
         rasterizer.clear();
@@ -183,7 +204,10 @@ namespace Rendering3D
 		{
 			model->Render(*this);
 		}
+
+        // Apply the dithering
         rasterizer.floyd_steinberg();
+
         rasterizer.get_color_buffer ().gl_draw_pixels (0, 0);
     } 
 

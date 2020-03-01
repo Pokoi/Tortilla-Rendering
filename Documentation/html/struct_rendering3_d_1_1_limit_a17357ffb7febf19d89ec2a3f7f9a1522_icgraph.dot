@@ -1,0 +1,23 @@
+digraph "Rendering3D::Limit::intersection_point"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="RL";
+  Node1 [label="Rendering3D::Limit\l::intersection_point",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip="Calculates the intersection point between a given line and the limit."];
+  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="Rendering3D::Clipping\l::check_bottom_limit",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_rendering3_d_1_1_clipping.html#a5e27e445746b5f165509a4b2f9961d4b",tooltip="Clip by bottom limit."];
+  Node2 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="Rendering3D::Clipping\l::polygon_clipper",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_rendering3_d_1_1_clipping.html#aba534a4870c76acd8365f8eacf907789",tooltip="Polygon clipping following Sutherland-Hodgman method."];
+  Node3 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="Rendering3D::Mesh::\lRender",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_rendering3_d_1_1_mesh.html#af633c14f003a0e61f13cf117724c3664",tooltip="Render the mesh."];
+  Node1 -> Node5 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node5 [label="Rendering3D::Clipping\l::check_left_limit",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_rendering3_d_1_1_clipping.html#a1df44875a1d44ee5b2e0ecf8499aff85",tooltip="Clip by left limit."];
+  Node5 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node1 -> Node6 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node6 [label="Rendering3D::Clipping\l::check_right_limit",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_rendering3_d_1_1_clipping.html#a8558ab393caf638bfbe84304c5af7265",tooltip="Clip by right limit."];
+  Node6 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node1 -> Node7 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node7 [label="Rendering3D::Clipping\l::check_top_limit",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_rendering3_d_1_1_clipping.html#a783ab16f34829adbec3b44b4e4c436f5",tooltip="Clip by top limit."];
+  Node7 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+}

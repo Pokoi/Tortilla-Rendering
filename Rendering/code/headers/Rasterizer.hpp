@@ -104,6 +104,9 @@
                 }
             }
 
+            /**
+            @brief Apply floyd steinberg dithering
+            */
             void floyd_steinberg()
             {   
                 float levels = 0.2;

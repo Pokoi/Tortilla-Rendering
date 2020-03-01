@@ -47,7 +47,11 @@
 
 namespace Rendering3D
 {
-	   	 
+
+    /**
+    @brief Creates a instance of model
+    @param mesh_path The path of the mesh
+    */
 	Model::Model(std::string mesh_path)
 	{
 
@@ -109,21 +113,28 @@ namespace Rendering3D
 		/////////////////////////////////////////////////////////////////////////////////////
 	}
 
+    /**
+    @brief Gets the transform reference
+    @return The transform reference
+    */
 	Transform & Model::get_transform()
 	{
 		return *transform;
 	}
 
+    /**
+    @brief Update the model
+    @param delta The delta time
+    @param view The view reference
+    */
 	void Model::Update(float delta, View & view)
 	{
 		transform->update_transform();
 		
 		// Apply camera transformations      
         transformation = view.get_camera().get_transform().get_inverse_transformation() * toolkit::Matrix44f(view.get_camera().get_projection()) * toolkit::Matrix44f(get_transform().get_transformation());
-              
-
-		// Transformation per vertex
         
+		// Transformation per vertex        
         for (size_t index = 0; index < original_vertices.size(); ++index)
         {
             toolkit::Point4f& vertex	= transformed_vertices[index]	= toolkit::Matrix44f(transformation) * toolkit::Matrix41f(original_vertices[index]);
@@ -153,6 +164,10 @@ namespace Rendering3D
         }   
 	}
     
+    /**
+    @brief Render the model
+    @param view The view reference
+    */
     void Model::Render(View& view)
     {
         for (std::shared_ptr <Mesh> & mesh : meshes)
@@ -161,6 +176,11 @@ namespace Rendering3D
         }
     }
 
+    /**
+    @brief Gets the material reference of the given mesh by index
+    @param index The index of the mesh to get the material attached to
+    @return The material reference
+    */
 	Material& Model::get_material(size_t index)
 	{
 		return meshes[index]->get_material();

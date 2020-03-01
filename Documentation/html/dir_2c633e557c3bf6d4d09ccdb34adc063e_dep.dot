@@ -1,0 +1,13 @@
+digraph "D:/Repositorios/3DRendering" {
+  compound=true
+  node [ fontsize="10", fontname="Helvetica"];
+  edge [ labelfontsize="10", labelfontname="Helvetica"];
+  subgraph clusterdir_738d0e3979310f81794b0f2a95365b39 {
+    graph [ bgcolor="#ddddee", pencolor="black", label="Repositorios" fontname="Helvetica", fontsize="10", URL="dir_738d0e3979310f81794b0f2a95365b39.html"]
+  subgraph clusterdir_2c633e557c3bf6d4d09ccdb34adc063e {
+    graph [ bgcolor="#eeeeff", pencolor="black", label="" URL="dir_2c633e557c3bf6d4d09ccdb34adc063e.html"];
+    dir_2c633e557c3bf6d4d09ccdb34adc063e [shape=plaintext label="3DRendering"];
+    dir_b6e8a9b9b1caf8eb425b8be82641fcff [shape=box label="Rendering" color="red" fillcolor="white" style="filled" URL="dir_b6e8a9b9b1caf8eb425b8be82641fcff.html"];
+  }
+  }
+}

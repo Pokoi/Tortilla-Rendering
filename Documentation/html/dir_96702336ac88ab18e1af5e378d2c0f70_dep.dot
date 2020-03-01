@@ -1,0 +1,11 @@
+digraph "D:/Repositorios/3DRendering/Rendering/code/sources" {
+  compound=true
+  node [ fontsize="10", fontname="Helvetica"];
+  edge [ labelfontsize="10", labelfontname="Helvetica"];
+  subgraph clusterdir_5620e8557a50742f3992ab7b7aa72444 {
+    graph [ bgcolor="#ddddee", pencolor="black", label="code" fontname="Helvetica", fontsize="10", URL="dir_5620e8557a50742f3992ab7b7aa72444.html"]
+  dir_96702336ac88ab18e1af5e378d2c0f70 [shape=box, label="sources", style="filled", fillcolor="#eeeeff", pencolor="black", URL="dir_96702336ac88ab18e1af5e378d2c0f70.html"];
+  }
+  dir_7e5c95e6414444b13591fe31eb3ff98e [shape=box label="headers" URL="dir_7e5c95e6414444b13591fe31eb3ff98e.html"];
+  dir_96702336ac88ab18e1af5e378d2c0f70->dir_7e5c95e6414444b13591fe31eb3ff98e [headlabel="17", labeldistance=1.5 headhref="dir_000006_000005.html"];
+}
