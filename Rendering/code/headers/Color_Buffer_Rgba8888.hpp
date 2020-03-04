@@ -57,9 +57,9 @@
 
 				void operator * (float scalar)
 				{
-					data.component.r *= scalar;
-					data.component.g *= scalar;
-					data.component.b *= scalar;
+					data.component.r = uint8_t(data.component.r * scalar);
+					data.component.g = uint8_t(data.component.g * scalar);
+					data.component.b = uint8_t(data.component.b * scalar);
 				}
 
             };

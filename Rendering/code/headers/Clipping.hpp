@@ -255,7 +255,7 @@ namespace Rendering3D
             if (input.size() > 0)
             {
 
-                for (int index = 0; index < input.size() - 1; ++index)
+                for (size_t index = 0; index < input.size() - 1; ++index)
                 {           
                     // Check if point is inside
                     if (limit < input[index])
@@ -300,7 +300,7 @@ namespace Rendering3D
 		{
             if (input.size() > 0)
             {
-                for (int index = 0; index < input.size() - 1; ++index)
+                for (size_t index = 0; index < input.size() - 1; ++index)
                 {
                     // Check if point is inside
                     if (limit > input[index])
@@ -344,7 +344,7 @@ namespace Rendering3D
             if (input.size() > 0)
             {
 
-			    for (int index = 0; index < input.size() - 1; ++index)
+			    for (size_t index = 0; index < input.size() - 1; ++index)
 			    {
 				    // Check if point is inside
 				    if (limit > input[index])
@@ -389,7 +389,7 @@ namespace Rendering3D
             if (input.size() > 0)
             {
 
-			    for (int index = 0; index < input.size() - 1; ++index)
+			    for (size_t index = 0; index < input.size() - 1; ++index)
 			    {
 				    // Check if point is inside
 				    if (limit < input[index])

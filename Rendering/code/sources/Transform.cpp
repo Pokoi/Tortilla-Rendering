@@ -193,7 +193,7 @@ namespace Rendering3D
                         matrix[8] * matrix[2] * matrix[5];
 
         determinant = matrix[0] * inverse[0] + matrix[1] * inverse[4] + matrix[2] * inverse[8] + matrix[3] * inverse[12];
-        determinant = 1.0 / determinant;
+        determinant = 1.0f / determinant;
 
         inverse_transformation[0][0] = inverse[0] * determinant;
         inverse_transformation[0][1] = inverse[1] * determinant;

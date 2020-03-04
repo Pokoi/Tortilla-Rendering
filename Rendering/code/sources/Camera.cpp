@@ -78,6 +78,6 @@ namespace Rendering3D
     void Camera::change_fov(View& view, float modificator)
     {
         current_fov += modificator;
-        projection.set(1, 50, current_fov, view.get_width() / view.get_height());
+        projection.set(1, 50, current_fov, float (view.get_width()) / view.get_height());
     }
 }

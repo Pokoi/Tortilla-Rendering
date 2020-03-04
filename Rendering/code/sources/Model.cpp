@@ -81,7 +81,7 @@ namespace Rendering3D
 				indices.resize(shapes[s].mesh.indices.size());
                 
                 // Calculate the vertex and normal for each index
-				for (int index = 0; index < indices.size(); ++index)
+				for (size_t index = 0; index < indices.size(); ++index)
 				{
 					int vertex_index = shapes[s].mesh.indices[index].vertex_index;
 					int normal_index = shapes[s].mesh.indices[index].normal_index;

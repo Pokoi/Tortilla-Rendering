@@ -133,7 +133,7 @@ namespace Rendering3D
         auto normals                = model->get_original_normals();
         auto & transformed_normals  = model->get_transformed_normals();        
 
-        for (int i = 0; i < indices.size(); ++i)
+        for (size_t i = 0; i < indices.size(); ++i)
         {
 			Color_Buffer_Rgba8888::Color diffuse = material.get_color();
             Color_Buffer_Rgba8888::Color ambient = view.get_ambient_color();
@@ -202,7 +202,7 @@ namespace Rendering3D
             b_component += ambient.data.component.b * material.get_ka();
 
             // Set the final color
-            material.get_transformed_colors()[indices[i]].set( r_component, g_component, b_component );          
+            material.get_transformed_colors()[indices[i]].set( (int)r_component, (int)g_component, (int)b_component );          
                  
         }       
     }   
@@ -214,7 +214,7 @@ namespace Rendering3D
     {   
         auto & transformed_vertices = model->get_transformed_vertices();
 
-        for (int i = 0; i < indices.size(); ++i)
+        for (size_t i = 0; i < indices.size(); ++i)
         {
             toolkit::Point4f& vertex = transformed_vertices[indices[i]];
             
@@ -237,7 +237,7 @@ namespace Rendering3D
 
         toolkit::Transformation3f transformation = translation * scaling;
 
-        for (int i = 0; i < indices.size(); ++i)
+        for (size_t i = 0; i < indices.size(); ++i)
         {
             model->get_display_vertices()[indices[i]] = Point4i(toolkit::Matrix44f(transformation) * toolkit::Matrix41f(model->get_transformed_vertices()[indices[i]]));
         }

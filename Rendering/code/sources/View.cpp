@@ -72,7 +72,7 @@ namespace Rendering3D
         camera{this}
 	{
         // Creates the random seed
-		std::srand(time(null));      
+		std::srand((unsigned int) time(null));      
 
         /////////////////////////////////////////////////////////////////
         // CAMERA
@@ -91,10 +91,10 @@ namespace Rendering3D
             std::shared_ptr<DirectionalLight> directional_light2 = std::make_shared<DirectionalLight>(Color_Buffer_Rgba8888::Color{ 252,246,166,255 }, toolkit::Vector4f{ {0.f, 2.f, 1.f, 1.f} });
             directional_lights.push_back(directional_light2);
 
-            std::shared_ptr<PointLight> light = std::make_shared<PointLight>(Color_Buffer_Rgba8888::Color{ 0,0,255,0 }, toolkit::Vector3f{ {-2.f, -2.f, 1.f} }, 1);
+            std::shared_ptr<PointLight> light = std::make_shared<PointLight>(Color_Buffer_Rgba8888::Color{ 0,0,255,0 }, toolkit::Vector3f{ {-2.f, -2.f, 1.f} }, 1.f);
             point_lights.push_back(light);      
 
-            std::shared_ptr<PointLight> light2 = std::make_shared<PointLight>(Color_Buffer_Rgba8888::Color{ 252,246,166,0 }, toolkit::Vector3f{ {0.f, -0.f, -4.f} }, 1);
+            std::shared_ptr<PointLight> light2 = std::make_shared<PointLight>(Color_Buffer_Rgba8888::Color{ 252,246,166,0 }, toolkit::Vector3f{ {0.f, -0.f, -4.f} }, 1.f);
             point_lights.push_back(light2);
         }
 		

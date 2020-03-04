@@ -58,7 +58,7 @@
                 color_buffer(target),
                 z_buffer(target.get_width () * target.get_height ())
             {
-				std::srand(time(NULL));
+				std::srand((unsigned int)time(NULL));
             }
 
             const Color_Buffer & get_color_buffer () const
@@ -80,7 +80,7 @@
 
             void clear ()
             {   
-                for (int offset = 0; offset < color_buffer.size(); ++offset)
+                for (size_t offset = 0; offset < color_buffer.size(); ++offset)
                 {
                     if (rand() % 10000 > 9998)
                     {
@@ -109,22 +109,22 @@
             */
             void floyd_steinberg()
             {   
-                float levels = 0.2;
+                float levels = 0.2f;
                 float lNorm = 255 * levels;             
               
                 Color c;               
                                 
                 int r, g, b, grey;
                 int nr, ng, nb;
-                float er, eg, eb;            
+                int er, eg, eb;            
                 
-                for (int offset = 0; offset < color_buffer.size(); ++offset)
+                for (size_t offset = 0; offset < color_buffer.size(); ++offset)
                 {
                     c = *(color_buffer.colors() + offset);
                     
                     if (c.data.component.r != 0)
                     {
-                        grey = std::sqrt((c.data.component.r * c.data.component.r + c.data.component.g * c.data.component.g + c.data.component.b * c.data.component.b)/3);
+                        grey = (int) std::sqrtf((c.data.component.r * c.data.component.r + c.data.component.g * c.data.component.g + c.data.component.b * c.data.component.b)/3.f);
                     }
                     else
                     {
@@ -137,9 +137,9 @@
 
                     if (g < 5) g = 5;
 
-                    nr = (r / 255) * lNorm;
-                    ng = (g / 255) * lNorm;
-                    nb = (b / 255) * lNorm;
+                    nr =int ( (r / 255) * lNorm);
+                    ng =int( (g / 255) * lNorm);
+                    nb =int( (b / 255) * lNorm);
 
                     er = (r - nr);
                     eg = (g - ng);
@@ -154,7 +154,7 @@
 
                         if (c.data.component.r != 0)
                         {
-                            grey = std::sqrt((c.data.component.r * c.data.component.r + c.data.component.g * c.data.component.g + c.data.component.b * c.data.component.b) / 3);
+							grey = (int)std::sqrtf((c.data.component.r * c.data.component.r + c.data.component.g * c.data.component.g + c.data.component.b * c.data.component.b) / 3.f);
                         }
                         else
                         {
@@ -176,7 +176,7 @@
 
                             if (c.data.component.r != 0)
                             {
-                                grey = std::sqrt((c.data.component.r * c.data.component.r + c.data.component.g * c.data.component.g + c.data.component.b * c.data.component.b) / 3);
+								grey = (int)std::sqrtf((c.data.component.r * c.data.component.r + c.data.component.g * c.data.component.g + c.data.component.b * c.data.component.b) / 3.f);
                             }
                             else
                             {
@@ -200,7 +200,7 @@
 
                         if (c.data.component.r != 0)
                         {
-                            grey = std::sqrt((c.data.component.r * c.data.component.r + c.data.component.g * c.data.component.g + c.data.component.b * c.data.component.b) / 3);
+							grey = (int)std::sqrtf((c.data.component.r * c.data.component.r + c.data.component.g * c.data.component.g + c.data.component.b * c.data.component.b) / 3.f);
                         }
                         else
                         {
@@ -220,7 +220,7 @@
 
                         if (c.data.component.r != 0)
                         {
-                            grey = std::sqrt((c.data.component.r * c.data.component.r + c.data.component.g * c.data.component.g + c.data.component.b * c.data.component.b) / 3);
+							grey = (int)std::sqrtf((c.data.component.r * c.data.component.r + c.data.component.g * c.data.component.g + c.data.component.b * c.data.component.b) / 3.f);
                         }
                         else
                         {
