@@ -36,11 +36,11 @@ The projects dependencies are included in the project settings. The code is divi
 ## Data model explanation
 
 The render model includes the following data model structure:  
-🥔 *View*: A class that contains the scene to render info. This class keeps the camera, rasterizer, lights and models references. Also contains the ambient color (if exists).  
-🥚 *Camera*: The object with the camera information (transformation matrix, projection matrix).  
-🧅 *Model*: A model contains the information about 3D model with at least 1 mesh, it's vertices coordinates, normals and materials.  
-🥔 *Mesh*: A mesh contains the indices references and the material of the mesh.  
-🥚 *Lighting*: Tortilla Rendering model supports two types of lights: directional lights and point lights. 
+🥔 *View*: A class that contains the scene to render info. This class keeps the camera, rasterizer, lights and models references. Also contains the ambient color (if exists).    
+🥚 *Camera*: The object with the camera information (transformation matrix, projection matrix).    
+🧅 *Model*: A model contains the information about 3D model with at least 1 mesh, it's vertices coordinates, normals and materials.    
+🥔 *Mesh*: A mesh contains the indices references and the material of the mesh.    
+🥚 *Lighting*: Tortilla Rendering model supports two types of lights: directional lights and point lights.   
 🧅 *Material*: Materials contains the info about diffuse color and the factor components of ambience, diffuse and light for rendering.  
 
 For more documentation, check [the doc](https://pokoi.github.io/Tortilla-Rendering/).  
@@ -65,9 +65,9 @@ For more documentation, check [the doc](https://pokoi.github.io/Tortilla-Renderi
 
 ## Built With
 
-🥔 [TinyObjLoader](https://github.com/tinyobjloader/tinyobjloader) - For .obj mesh assets loading.
-🥚 [SFML](https://www.sfml-dev.org/) - For window events in the test. This doesn't affect to the render model.
-🧅 [Cpp toolkit](https://bitbucket.org/angel-esne/cpp-toolkit/src/default/) - For maths operations and data models.
+🥔 [TinyObjLoader](https://github.com/tinyobjloader/tinyobjloader) - For .obj mesh assets loading.  
+🥚 [SFML](https://www.sfml-dev.org/) - For window events in the test. This doesn't affect to the render model.  
+🧅 [Cpp toolkit](https://bitbucket.org/angel-esne/cpp-toolkit/src/default/) - For maths operations and data models.  
 🥔 [OpenGL](https://www.opengl.org/) - Only used to change the window pixel-buffer, not for rendering operations.
 
 
